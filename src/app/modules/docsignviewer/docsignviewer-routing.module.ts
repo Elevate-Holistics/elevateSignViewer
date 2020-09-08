@@ -13,7 +13,17 @@ const routes: Routes = [
   
       children: [
         {
-          path: '',
+          path: ':cmpid/:envid',
+          component: ViewerComponent,
+        
+          data: {
+            title: 'Sign',
+            code: 'sign'
+  
+          }
+        },
+        {
+          path: ':cmpid/:envid/:docid',
           component: ViewerComponent,
         
           data: {
