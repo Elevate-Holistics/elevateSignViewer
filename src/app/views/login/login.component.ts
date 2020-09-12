@@ -119,6 +119,7 @@ import { ToastService } from '../../service/toast-service';
 import { Momservice } from '../../service/mom.service';
 import { SettingsService } from '../../service/settings.service';
 import { UserModel } from '../../intefaces/userModel';
+import { SignviewerService } from '../../service/signviewer.service';
 export class LoginDetail {
   username: string;
   password: string;
@@ -144,7 +145,8 @@ export class LoginComponent implements OnInit {
     public global: GlobalService,
     //private deviceService: DeviceDetectorService,
     private fb: FormBuilder, private message: ToastService,
-    private momService: Momservice, private settingService: SettingsService
+    private momService: Momservice, private settingService: SettingsService,
+    private signviewer: SignviewerService
   ) {
 
     this.helper = new Helper();
@@ -178,52 +180,63 @@ export class LoginComponent implements OnInit {
     return true;
   };
 
-  login = function () {
-     
-    this.global.clearUser();
-    if (this.validation()) {
-      this.loginService.checkCredential({ email: this.objlogindtl.username, password: this.objlogindtl.password, cmpcode: this.objlogindtl.cmpcode, nocomp: true }).subscribe(
-        data1 => {
 
-          let data = { 'resultValue': data1.resultValue.result, 'resultKey': data1.resultKey }
+  // login() {
+  //   this.signviewer.checkSignvieweruser({
+  //     "operate": 'login',
+  //     "email": this.objlogindtl.username,
+  //     "otp": this.objlogindtl.password
+  //   }).subscribe((data: any) => {
 
-          if (data.resultKey === 1 || data.resultKey === 2) {
+  //   })
+  // }
 
-            const user: UserModel = {
-              id: data.resultValue.userid,
-              name: data.resultValue.name,
-              token: data.resultValue.token,
-              cmp: data.resultValue.cmp,
-              usertype:data.resultValue.usertype,
-              rolename:data.resultValue.rolename
-            };
-            if (data.resultValue.cmp)
-              this.global.setCompany({
-                id: data.resultValue.cmp,
-                name: data.resultValue.cmpname,
-                logo:data.resultValue.logo
-              });
-            this.global.setUser(user);
-            //this.setSetting();
-            if (data.resultKey === 2) {
-              this.router.navigateByUrl('/changepassword');
-              return false;
+    login = function () {
+
+      this.global.clearUser();
+      if (this.validation()) {
+        this.loginService.checkCredential({ email: this.objlogindtl.username, password: this.objlogindtl.password, cmpcode: this.objlogindtl.cmpcode, nocomp: true }).subscribe(
+          data1 => {
+
+            let data = { 'resultValue': data1.resultValue.result, 'resultKey': data1.resultKey }
+
+            if (data.resultKey === 1 || data.resultKey === 2) {
+
+              const user: UserModel = {
+                id: data.resultValue.userid,
+                name: data.resultValue.name,
+                token: data.resultValue.token,
+                cmp: data.resultValue.cmp,
+                usertype:data.resultValue.usertype,
+                rolename:data.resultValue.rolename
+              };
+              if (data.resultValue.cmp)
+                this.global.setCompany({
+                  id: data.resultValue.cmp,
+                  name: data.resultValue.cmpname,
+                  logo:data.resultValue.logo
+                });
+              this.global.setUser(user);
+              //this.setSetting();
+              if (data.resultKey === 2) {
+                this.router.navigateByUrl('/changepassword');
+                return false;
+              }
+  debugger
+              this.router.navigateByUrl('/sign');
+
+            } else {
+              this.message.show('error', data1.defaultError, 'error', this.translate);
             }
-debugger
-            this.router.navigateByUrl('/sign');
+          },
+          error => {
 
-          } else {
-            this.message.show('error', data1.defaultError, 'error', this.translate);
+            this.toastr.error(this.helper.translate(this.translate, 'loginlogin'),
+              this.helper.translate(this.translate, 'regreg'));
           }
-        },
-        error => {
-
-          this.toastr.error(this.helper.translate(this.translate, 'loginlogin'),
-            this.helper.translate(this.translate, 'regreg'));
-        }
-      );
-    }
-  };
+        );
+      }
+    };
 
   checkIfUserLoggedIn() {
 
