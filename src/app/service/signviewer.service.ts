@@ -10,5 +10,7 @@ export class SignviewerService {
   getDocumnet(req: any) {
     return this.dataservice.getHttpData('/signviewer', req);
   }
-
+  checkSignvieweruser (req:any){
+    return this.dataservice.postHttpData('/auth', req);
+  }
 }

@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { Prerequisite } from '../../service/prerequisite';
 import {ViewerComponent} from '../docsignviewer/viewer/viewer.component';
-
+import {ErrorpageComponent} from '../docsignviewer/errorpage/errorpage.component';
 import { from } from 'rxjs';
 
 const routes: Routes = [
@@ -29,6 +29,17 @@ const routes: Routes = [
           data: {
             title: 'Sign',
             code: 'sign'
+  
+          }
+        }
+,
+        {
+          path: 'error',
+          component: ErrorpageComponent,
+        
+          data: {
+            title: 'Error',
+            code: 'error'
   
           }
         }

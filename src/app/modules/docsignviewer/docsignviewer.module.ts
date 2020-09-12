@@ -4,8 +4,9 @@ import { ViewerComponent } from './viewer/viewer.component';
 import {DocsignviewerRoutingModule} from '../docsignviewer/docsignviewer-routing.module';
 import { iViewerModule } from "esigndoccontrol";
 import {SharedModule} from '../../shared/shared.module';
+import { ErrorpageComponent } from './errorpage/errorpage.component';
 @NgModule({
-  declarations: [ViewerComponent],
+  declarations: [ViewerComponent, ErrorpageComponent],
   imports: [
     CommonModule,
     DocsignviewerRoutingModule,
