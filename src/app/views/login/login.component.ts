@@ -62,7 +62,7 @@
 //   };
 
 //   login = function () {
-// debugger
+// 
 //     localStorage.setItem('outlet', JSON.stringify([]));
 
 //     if (this.validation()) {
@@ -190,14 +190,14 @@ export class LoginComponent implements OnInit {
 
 
   login(state: RouterStateSnapshot) {
-    debugger
+    
     this.signviewer.checkSignvieweruser({
       "operate": 'login',
       "email": this.objlogindtl.username,
       "otp": this.objlogindtl.password,
       'cmpid': 2
     }).subscribe((data: any) => {
-      debugger
+      
       if(data.resultKey ==1 ){
       let _data = data.resultValue[0];
       const user: UserModel = {
@@ -207,7 +207,7 @@ export class LoginComponent implements OnInit {
       };
 
       this.global.setUser(user);
-      debugger
+      
       let url = this.global.getBackURL();
       this.router.navigate([url]);
 
@@ -247,7 +247,7 @@ export class LoginComponent implements OnInit {
   //               this.router.navigateByUrl('/changepassword');
   //               return false;
   //             }
-  // debugger
+  // 
   //             this.router.navigateByUrl('/sign');
 
   //           } else {
