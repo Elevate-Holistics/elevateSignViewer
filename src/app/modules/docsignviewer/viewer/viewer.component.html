@@ -6,7 +6,7 @@
 </ol>
 
  
-<div class="fixed-content p-0" >
+<div class="fixed-content p-0 " style="overflow-x: hidden;" >
   <i-docsignviewer 
   #viewer
   [toolbarBg]="'#e7edee'"
@@ -20,5 +20,6 @@
   (onDoclistselect)="onDocListSelect($event)"
   (onFinished)="onFinished($event)"
   (onCancel)="onCancel($event)"
+  (onSignatureCreate)="onSignatureCreate($event)"
   ></i-docsignviewer>
   </div>
