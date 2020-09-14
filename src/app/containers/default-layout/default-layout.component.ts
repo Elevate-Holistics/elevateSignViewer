@@ -69,8 +69,10 @@ export class DefaultLayoutComponent implements OnInit, OnDestroy {
       attributes: true
     });
 
-    this.username = this.global.getUser().name;
-    this.role = this.global.getUser().rolename;
+    this.username = 'Sudo';
+    // this.global.getUser().name
+    this.role = 'sudo';
+    // this.global.getUser().rolename
 
     this.onModelShow = this.modalService.onShown.subscribe((evt) => {
 
@@ -166,7 +168,8 @@ export class DefaultLayoutComponent implements OnInit, OnDestroy {
     this.menuservice.getMenu({
       'type': 'usermenus',
       'userid': this.global.getUser().id,
-      'usertype': this.global.getUser().usertype
+      'usertype': 1
+      // this.global.getUser().usertype
     }).subscribe(
       data => {
 
