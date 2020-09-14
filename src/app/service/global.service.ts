@@ -45,6 +45,7 @@ export class GlobalService {
     private _envupdated: BehaviorSubject<boolean> = new BehaviorSubject(false);
     public btnStyle = 0;
     user: any = {};
+    backUrl: any = '';
     companyDispData: any = 0;
     loader: Boolean = false;
     loadertext: String = 'LOADING';
@@ -97,7 +98,7 @@ export class GlobalService {
     public reloadConfig() {
         this.config = environment as any;
         this.config.upload_folder = this.config.api_root + '/' + this.config.upload_folder;
-        this.config.directUpload = this.config.api_root + '/company(' + this.getUser().cmp + ')/' + this.config.directUpload;
+        // this.config.directUpload = this.config.api_root + '/company(' + this.getUser().cmp + ')/' + this.config.directUpload;
         this.getEnvData();
         this.setFileConfig(2097152);
         this.getCompanyInfo();
@@ -159,6 +160,18 @@ export class GlobalService {
         }
         return this.user;
     }
+
+
+    public getBackURL() {
+       
+        return this.backUrl;
+    }
+
+    public setBackurl(url){
+        this.backUrl =url;
+    }
+
+
     public setUser(value: UserModel) {
         this.user = value;
         localStorage.setItem('user', JSON.stringify(value));
