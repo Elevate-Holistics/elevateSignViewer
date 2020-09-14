@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { iDocsigneditorComponent } from 'esigndoccontrol';
+import { iDocsigneditorComponent, iDocsignviewerComponent } from 'esigndoccontrol';
 import { SignviewerService } from '../../../service/signviewer.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalService } from '../../../service/global.service';
@@ -11,14 +11,14 @@ import { Location } from '@angular/common';
     styleUrls: ['./viewer.component.css']
 })
 export class ViewerComponent implements OnInit {
-    @ViewChild('viewer', { static: false }) viewer: any
+    @ViewChild('viewer', { static: false }) viewer: iDocsignviewerComponent
     options = {
         fonts: []
     }
 
     activedoc: any = '';
     doclist: any = [];
-    defaultDocdata ='';
+    defaultDocdata = '';
     // [{name: 'Document Subject D Subject Herer ajjl',id: 1,status_icon: 'fa-warning',status_color: 'rgb(224, 120, 0)',extra: {}}, {name: 'DCS Subject D Subject Herer ajjl',status_icon: 'fa-check',status_color: 'rgb(0, 184, 92)',id: 2,extra: {}}]
     filePath = '';
     pdfSrc = "assets/sdlc.pdf";
@@ -50,25 +50,44 @@ export class ViewerComponent implements OnInit {
         // }, 100);
     }
     onFinished(e) {
-        console.log(e)
+        let data = this.viewer.getValues();
+        console.log(data);
+
+        this.signviewer.postData({
+            'operate': 'finish',
+            'dmid': this.envid,
+            'drid': this.docid,
+            'data': data,
+            'cmpid': 'cmp' + this.cmpid
+
+        }).subscribe((data: any) => {
+
+        })
+
     }
 
     onCancel(e) {
 
     }
 
-    onDocListSelect(item){
-        
+    onDocListSelect(item) {
+
         this.bindDocumentDetails(item.drid);
     }
     setDatatoViewer(item) {
-     
 
+        
         this.activedoc = item.id;
+        let docdata = (item.docdata != '{}' || item.docdata != null || item.docdata != undefined) ? JSON.parse(item.docdata) : item.docdata;
+        let valuedata = (item.valuedata != '{}' || item.valuedata != null || item.valuedata != undefined) ? JSON.parse(item.valuedata) : item.valuedata;
 
-        this.viewer.setData(item.src,{ "1": { "1599553630906": { "extras": { "recipient": { "val": "Patients", "extra": ["Patients"] } }, "style": { "fontFamily": "Arial", "fontSize": 12, "fontStyle": "normal", "fontWeight": "normal", "width": 100, "left": 241, "top": 214 }, "dataset": { "name": "1599553630906", "type": "text", "page": 1, "fieldtype": "none", "maxlength": 1000, "require": true }, "type": "text", "id": "1599553630906", "text": "TextBox", "val": "Value" }, "1599553632941": { "extras": { "ddlprop": { "val": "asdlksja;sdklsja;sds", "extra": ["asdlksja", "sdklsja", "sds"], "defval": "sdklsja" }, "recipient": { "val": "Patients", "extra": ["Patients"] } }, "style": { "left": 624, "top": 228, "fontFamily": "Arial", "fontSize": 12, "fontStyle": "normal", "fontWeight": "normal", "width": 100 }, "dataset": { "name": "1599553632941", "type": "ddl", "page": 1, "require": true }, "type": "ddl", "id": "1599553632941", "text": "Dropdown", "val": "sdklsja" }, "1599553654021": { "extras": { "recipient": { "val": "Doctor", "extra": ["Doctor"] } }, "style": { "left": 377, "top": 326, "width": 50, "height": 50 }, "dataset": { "name": "1599553654021", "type": "sign", "page": 1, "require": true }, "type": "sign", "id": "1599553654021" } } } );
-        this.router.navigate(['/sign/2/'+ this.envid+'/'+ item.drid]);
-      
+        console.log('docdata', docdata);
+        console.log('valuedata', valuedata);
+        this.viewer.setData(item.src, docdata);
+        // this.router.navigate(['/sign/2/' + this.envid + '/' + item.drid]);
+
+        //  this.viewer.setVisibility();
+
     }
 
     bindDocumentsList() {
@@ -90,7 +109,7 @@ export class ViewerComponent implements OnInit {
 
     }
     bindDocumentDetails(templateid) {
-        
+
         this.signviewer.getDocumnet({
             "operate": 'docdetail',
             "dmid": this.envid,
@@ -98,20 +117,21 @@ export class ViewerComponent implements OnInit {
             "templateid": templateid
         }).subscribe((data) => {
             if (data.resultKey == 1) {
-                 this.makeData(data.resultValue);
+
+                this.makeData(data.resultValue);
             }
 
 
         })
     }
     makeData(data) {
+
         
-     
         if (data.length > 0) {
             let docdetail = data[0];
             let tempUrl = JSON.parse(docdetail.url);
             let url = tempUrl.doc;
- 
+
             let result = this.doclist.find((a) => {
                 if (a.id == docdetail.id) {
 
@@ -124,47 +144,17 @@ export class ViewerComponent implements OnInit {
             if (result != undefined) {
                 this.setDatatoViewer(result);
             }
-           
+
 
             console.log(this.doclist);
 
 
-            // data.forEach(element => {
-            //     let tempSrc = element.src;
-            //     element.src = this.filePath + tempSrc;
-            //     this.doclist.push(element);
-            // });
-
-
-
-
-
-            //     if (this.activatedRoute.snapshot.paramMap.has('docid')) {
-
-            //         let docid = this.activatedRoute.snapshot.paramMap.get('docid');
-            //         let result = data.find((b) => {
-            //             return b.id == docid;
-            //         })
-            //      if(result !=undefined){
-            //         this.onDocListSelect(result);
-            //      }else {
-            //         this.router.navigate(['/sign/error']);
-            //      }
-
-
-            //     } else {
-
-            //         this.onDocListSelect(data[0]);
-            //     }
-
-            // }else {
-
-            //       this.router.navigate(['/sign/error']);
-            // }
-
-        }else {
+        } else {
             this.router.navigate(['/sign/error']);
         }
     }
 
+    onSignatureCreate(event){
+        
+    }
 }
