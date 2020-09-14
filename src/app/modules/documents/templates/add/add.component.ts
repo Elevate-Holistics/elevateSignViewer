@@ -74,7 +74,7 @@ export class AddComponent implements OnInit {
     event.formData.append('usercreated', this.global.getUser().id);
 
     event.formData.append('cmp', this.global.getCompany());
-    event.xhr.setRequestHeader('Authorization', 'Bearer ' + this.global.getUser().token);
+   // event.xhr.setRequestHeader('Authorization', 'Bearer ' + this.global.getUser().token);
   }
   onFileUpload(event, fileUpload) {
     let res: any = {};
