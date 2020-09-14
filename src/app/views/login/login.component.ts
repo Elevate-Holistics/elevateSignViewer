@@ -106,7 +106,7 @@
 
 // }
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router ,RouterStateSnapshot,ActivatedRoute} from '@angular/router';
 import { LoginApiService } from '../../service/login.service';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
@@ -120,6 +120,7 @@ import { Momservice } from '../../service/mom.service';
 import { SettingsService } from '../../service/settings.service';
 import { UserModel } from '../../intefaces/userModel';
 import { SignviewerService } from '../../service/signviewer.service';
+ 
 export class LoginDetail {
   username: string;
   password: string;
@@ -138,6 +139,9 @@ export class LoginComponent implements OnInit {
   objlogindtl = new LoginDetail();
   lang: any = [];
   helper = {};
+  envid:any='';
+  docid:any=''; 
+  cmpid:any='';
   constructor(private router: Router,
     private loginService: LoginApiService,
     private toastr: ToastrService, private translate: TranslateService,
@@ -146,7 +150,7 @@ export class LoginComponent implements OnInit {
     //private deviceService: DeviceDetectorService,
     private fb: FormBuilder, private message: ToastService,
     private momService: Momservice, private settingService: SettingsService,
-    private signviewer: SignviewerService
+    private signviewer: SignviewerService, private activatedRoute: ActivatedRoute
   ) {
 
     this.helper = new Helper();
@@ -164,8 +168,12 @@ export class LoginComponent implements OnInit {
   };
 
   ngOnInit() {
+
+    this.envid = this.activatedRoute.snapshot.paramMap.get('envid');
+    this.cmpid = this.activatedRoute.snapshot.paramMap.get('cmpid');
+    this.docid  = this.activatedRoute.snapshot.paramMap.get('docid');
     $('#username').focus();
-    this.checkIfUserLoggedIn();
+   // this.checkIfUserLoggedIn();
     //this.bindLang();
   }
 
@@ -181,62 +189,79 @@ export class LoginComponent implements OnInit {
   };
 
 
-  // login() {
-  //   this.signviewer.checkSignvieweruser({
-  //     "operate": 'login',
-  //     "email": this.objlogindtl.username,
-  //     "otp": this.objlogindtl.password
-  //   }).subscribe((data: any) => {
+  login(state: RouterStateSnapshot) {
+    debugger
+    this.signviewer.checkSignvieweruser({
+      "operate": 'login',
+      "email": this.objlogindtl.username,
+      "otp": this.objlogindtl.password,
+      'cmpid': 2
+    }).subscribe((data: any) => {
+      debugger
+      if(data.resultKey ==1 ){
+      let _data = data.resultValue[0];
+      const user: UserModel = {
+        email: _data.email,
+        key: _data.key,
+        id:_data.id
+      };
 
-  //   })
-  // }
+      this.global.setUser(user);
+      debugger
+      let url = this.global.getBackURL();
+      this.router.navigate([url]);
 
-    login = function () {
 
-      this.global.clearUser();
-      if (this.validation()) {
-        this.loginService.checkCredential({ email: this.objlogindtl.username, password: this.objlogindtl.password, cmpcode: this.objlogindtl.cmpcode, nocomp: true }).subscribe(
-          data1 => {
+    }
+    })
+  }
 
-            let data = { 'resultValue': data1.resultValue.result, 'resultKey': data1.resultKey }
+  //   login = function () {
 
-            if (data.resultKey === 1 || data.resultKey === 2) {
+  //     this.global.clearUser();
+  //     if (this.validation()) {
+  //       this.loginService.checkCredential({ email: this.objlogindtl.username, password: this.objlogindtl.password, cmpcode: this.objlogindtl.cmpcode, nocomp: true }).subscribe(
+  //         data1 => {
 
-              const user: UserModel = {
-                id: data.resultValue.userid,
-                name: data.resultValue.name,
-                token: data.resultValue.token,
-                cmp: data.resultValue.cmp,
-                usertype:data.resultValue.usertype,
-                rolename:data.resultValue.rolename
-              };
-              if (data.resultValue.cmp)
-                this.global.setCompany({
-                  id: data.resultValue.cmp,
-                  name: data.resultValue.cmpname,
-                  logo:data.resultValue.logo
-                });
-              this.global.setUser(user);
-              //this.setSetting();
-              if (data.resultKey === 2) {
-                this.router.navigateByUrl('/changepassword');
-                return false;
-              }
-  debugger
-              this.router.navigateByUrl('/sign');
+  //           let data = { 'resultValue': data1.resultValue.result, 'resultKey': data1.resultKey }
 
-            } else {
-              this.message.show('error', data1.defaultError, 'error', this.translate);
-            }
-          },
-          error => {
+  //           if (data.resultKey === 1 || data.resultKey === 2) {
 
-            this.toastr.error(this.helper.translate(this.translate, 'loginlogin'),
-              this.helper.translate(this.translate, 'regreg'));
-          }
-        );
-      }
-    };
+  //             const user: UserModel = {
+  //               id: data.resultValue.userid,
+  //               name: data.resultValue.name,
+  //               token: data.resultValue.token,
+  //               cmp: data.resultValue.cmp,
+  //               usertype:data.resultValue.usertype,
+  //               rolename:data.resultValue.rolename
+  //             };
+  //             if (data.resultValue.cmp)
+  //               this.global.setCompany({
+  //                 id: data.resultValue.cmp,
+  //                 name: data.resultValue.cmpname,
+  //                 logo:data.resultValue.logo
+  //               });
+  //             this.global.setUser(user);
+  //             //this.setSetting();
+  //             if (data.resultKey === 2) {
+  //               this.router.navigateByUrl('/changepassword');
+  //               return false;
+  //             }
+  // debugger
+  //             this.router.navigateByUrl('/sign');
+
+  //           } else {
+  //             this.message.show('error', data1.defaultError, 'error', this.translate);
+  //           }
+  //         },
+  //         error => {
+
+  //           this.toastr.error(this.helper.translate(this.translate, 'loginlogin'),
+  //             this.helper.translate(this.translate, 'regreg'));
+  //         }
+  //       );
+  //     }
+  //   };
 
   checkIfUserLoggedIn() {
 
@@ -247,21 +272,21 @@ export class LoginComponent implements OnInit {
 
   }
 
-  setSetting() {
-    this.settingService.show({
-      'type': 'GENERAL',
-      'user_id': this.global.getUser().id
-    }).subscribe((res: any) => {
-      if (res.resultKey == 1) {
-        let data = JSON.parse(res.resultValue.jsondata);
-        this.global.setEnvData({
-          'decimal': data.decimal,
-          'dateformat': data.dateformat,
-          'defaultCur': data.currency
-        });
-      }
-    })
-  }
+  // setSetting() {
+  //   this.settingService.show({
+  //     'type': 'GENERAL',
+  //     'user_id': this.global.getUser().id
+  //   }).subscribe((res: any) => {
+  //     if (res.resultKey == 1) {
+  //       let data = JSON.parse(res.resultValue.jsondata);
+  //       this.global.setEnvData({
+  //         'decimal': data.decimal,
+  //         'dateformat': data.dateformat,
+  //         'defaultCur': data.currency
+  //       });
+  //     }
+  //   })
+  // }
 
   bindLang() {
     this.momService.getLanguage({
