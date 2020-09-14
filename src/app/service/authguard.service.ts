@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, CanLoad, CanActivateChild, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Observable ,  Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { GlobalService } from './global.service';
 import { UserModel } from './../intefaces/userModel';
 import { MenuService } from './menu.service';
@@ -11,12 +11,12 @@ export class AuthGuard implements CanActivate, CanLoad, CanActivateChild {
   }
 
   public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    
+
     return this.checkFun(route, state);
   }
 
   public canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    
+
     return this.checkFun(route, state);
   }
 
@@ -25,12 +25,12 @@ export class AuthGuard implements CanActivate, CanLoad, CanActivateChild {
   }
 
   private checkFun(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-   
+
     const that = this;
     const routeconfig = route.data;
     const checks = that.checkCredentials();
     console.log('state')
-    
+
     this.global.setCurrentMenu(route.data.code);
 
     return Observable.create((observer: Subject<boolean>) => {
@@ -41,6 +41,9 @@ export class AuthGuard implements CanActivate, CanLoad, CanActivateChild {
 
       }
       else {
+        
+        this.global.setBackurl(state.url);
+        //  localStorage.setItem('backurl', JSON.stringify(state.url));
         that._router.navigate(['/login']);
         observer.next(true);
       }
@@ -50,11 +53,11 @@ export class AuthGuard implements CanActivate, CanLoad, CanActivateChild {
 
 
   public checkCredentials(): any {
- 
+    
     const usr: UserModel = this.global.getUser();
     if (Object.keys(usr).length) { // check user is locally present in memory
       return { 'status': true };
-    }else{
+    } else {
       return { 'status': false };
     }
 
