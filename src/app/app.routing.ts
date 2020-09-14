@@ -51,11 +51,7 @@ export const routes: Routes = [
       {
         path: 'sign',
         loadChildren: () => import('./modules/docsignviewer/docsignviewer.module').then(m => m.DocsignviewerModule)
-      },
-      {
-        path: 'documents',
-        loadChildren: () => import('./modules/documents/documents.module').then(m => m.DocumentsModule)
-      },
+      }
     ]
   },
   //{ path: '**', component: P404Component }
