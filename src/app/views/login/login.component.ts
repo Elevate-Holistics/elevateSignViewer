@@ -195,7 +195,9 @@ export class LoginComponent implements OnInit {
       "operate": 'login',
       "email": this.objlogindtl.username,
       "otp": this.objlogindtl.password,
-      'cmpid': 2
+      'cmpid': 2,
+      
+
     }).subscribe((data: any) => {
       
       if(data.resultKey ==1 ){
@@ -205,7 +207,7 @@ export class LoginComponent implements OnInit {
         key: _data.key,
         id:_data.id
       };
-
+ 
       this.global.setUser(user);
       
       let url = this.global.getBackURL();
