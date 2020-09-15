@@ -163,18 +163,21 @@ export class GlobalService {
 
 
     public getBackURL() {
-       
+
         return this.backUrl;
     }
 
-    public setBackurl(url){
-        this.backUrl =url;
+    public setBackurl(url) {
+        this.backUrl = url;
     }
 
 
     public setUser(value: UserModel) {
         this.user = value;
         localStorage.setItem('user', JSON.stringify(value));
+    }
+   public removeUser() {
+    localStorage.removeItem('user');
     }
 
     public setEnvData(value: EnvData) {
