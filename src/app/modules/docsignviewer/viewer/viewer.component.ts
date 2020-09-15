@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { iDocsigneditorComponent, iDocsignviewerComponent } from 'esigndoccontrol';
+
 import { SignviewerService } from '../../../service/signviewer.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalService } from '../../../service/global.service';
@@ -70,7 +71,8 @@ export class ViewerComponent implements OnInit {
             'dmid': this.envid,
             'drid': this.docid,
             'data': data,
-            'cmpid': 'cmp' + this.cmpid
+            'cmpid': 'cmp' + this.cmpid,
+            "key": this.global.getUser().key
 
         }).subscribe((data: any) => {
 
@@ -95,7 +97,7 @@ export class ViewerComponent implements OnInit {
 
         console.log('docdata', docdata);
         console.log('valuedata', valuedata);
-        this.viewer.setData(item.src, docdata);
+        this.viewer.setData(item.src, docdata, "Doctor");
         // this.router.navigate(['/sign/2/' + this.envid + '/' + item.drid]);
 
         //  this.viewer.setVisibility();
@@ -108,12 +110,24 @@ export class ViewerComponent implements OnInit {
             "operate": 'list',
             "dmid": this.envid,
             "cmpid": "cmp" + this.cmpid,
-            "templateid": this.activatedRoute.snapshot.paramMap.has('docid') ? this.docid : null
+            "templateid": this.activatedRoute.snapshot.paramMap.has('docid') ? this.docid : null,
+            "key": this.global.getUser().key
         }).subscribe((data) => {
             if (data.resultKey == 1) {
-                this.doclist = data.resultValue;
-                this.bindDocumentDetails(this.docid);
+                if (data.resultValue.length == 0) {
+                    this.global.removeUser();
+                    this.router.navigate(['/sign/' + this.cmpid + '/' + this.envid + '/' + this.docid]);
+                    // this.global.setBackurl();
+
+                }
+                else {
+
+                    this.doclist = data.resultValue;
+                    this.bindDocumentDetails(this.docid);
+                }
+
             }
+
 
 
         })
@@ -121,12 +135,13 @@ export class ViewerComponent implements OnInit {
 
     }
     bindDocumentDetails(templateid) {
-debugger
+        debugger
         this.signviewer.getDocumnet({
             "operate": 'docdetail',
             "dmid": this.envid,
             "cmpid": "cmp" + this.cmpid,
-            "templateid": templateid
+            "templateid": templateid,
+            "key": this.global.getUser().key
         }).subscribe((data) => {
             if (data.resultKey == 1) {
 
