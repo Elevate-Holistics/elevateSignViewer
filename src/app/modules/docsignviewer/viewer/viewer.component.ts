@@ -45,6 +45,16 @@ export class ViewerComponent implements OnInit {
     }
 
     ngAfterViewInit(): void {
+        this.viewer.addSignatureFonts([{
+            name: '\'Great Vibes\'',
+            url: 'https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap'
+        }, {
+            name: '\'Alex Brush\'',
+            url: 'https://fonts.googleapis.com/css2?family=Alex+Brush&family=Great+Vibes&family=Rock+Salt&display=swap'
+        }, {
+            name: '\'Herr Von Muellerhoff\'',
+            url: 'https://fonts.googleapis.com/css2?family=Alex+Brush&family=Great+Vibes&family=Herr+Von+Muellerhoff&family=Rock+Salt&display=swap'
+        }])
         //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
         //Add 'implements AfterViewInit' to the class.
         //  setTimeout(() => {
@@ -111,7 +121,7 @@ export class ViewerComponent implements OnInit {
 
     }
     bindDocumentDetails(templateid) {
-
+debugger
         this.signviewer.getDocumnet({
             "operate": 'docdetail',
             "dmid": this.envid,

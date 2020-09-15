@@ -27,7 +27,7 @@
     "build": "ng build --prod --aot --named-chunks --build-optimizer --vendor-chunk --output-hashing all --extract-css true --base-href /Elevate/ElevateWeb/",
     "buildlive": "ng build --prod --aot --named-chunks --build-optimizer --vendor-chunk --output-hashing bundles --extract-css true --base-href /Elevate/ElevateWeb/",
     "buildstage": "ng build -c uat --aot --named-chunks --build-optimizer --vendor-chunk --output-hashing bundles --extract-css true --base-href /Elevate/ElevateWeb/",
-    "uat": "ng build -c uat --aot --named-chunks --build-optimizer --vendor-chunk --output-hashing bundles --extract-css true --base-href /edoc/",
+    "uat": "ng build -c uat --aot --named-chunks --build-optimizer --vendor-chunk --output-hashing bundles --extract-css true --base-href /viewer/",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -58,7 +58,7 @@
     "chart.js": "^2.9.2",
     "core-js": "^3.6.4",
     "datatables.net-dt": "1.10.20",
-    "esigndoccontrol": "https://github.com/pratikidea/doceditor/releases/download/0.0.5/esigndoccontrol-0.0.5.zip",
+    "esigndoccontrol": "https://github.com/pratikidea/doceditor/files/5217834/esigndoccontrol-0.0.11.zip",
     "flag-icon-css": "^3.4.6",
     "font-awesome": "^4.7.0",
     "jquery": "^3.5.0",
