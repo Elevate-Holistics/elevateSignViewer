@@ -189,8 +189,8 @@ export class LoginComponent implements OnInit {
   };
 
 
-  login(state: RouterStateSnapshot) {
-    
+  login( ) {
+    debugger
     this.signviewer.checkSignvieweruser({
       "operate": 'login',
       "email": this.objlogindtl.username,
