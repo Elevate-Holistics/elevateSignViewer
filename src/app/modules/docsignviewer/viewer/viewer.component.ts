@@ -4,11 +4,13 @@ import { SignviewerService } from '../../../service/signviewer.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalService } from '../../../service/global.service';
 import { Location } from '@angular/common';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
     selector: 'app-viewer',
     templateUrl: './viewer.component.html',
-    styleUrls: ['./viewer.component.css']
+    styleUrls: ['./viewer.component.css'],
+    providers: [ConfirmationService]
 })
 export class ViewerComponent implements OnInit {
     @ViewChild('viewer', { static: false }) viewer: iDocsignviewerComponent
@@ -26,7 +28,7 @@ export class ViewerComponent implements OnInit {
     cmpid: string = '';
     docid: string = '';
     constructor(private signviewer: SignviewerService, private activatedRoute: ActivatedRoute,
-        private router: Router, private global: GlobalService, private location: Location,) { }
+        private router: Router, private global: GlobalService, private location: Location, private confirmmsg: ConfirmationService,) { }
 
     ngOnInit() {
 
@@ -63,7 +65,7 @@ export class ViewerComponent implements OnInit {
         }).subscribe((data: any) => {
 
         })
-
+        this.onSignatureCreate(null);
     }
 
     onCancel(e) {
@@ -76,7 +78,7 @@ export class ViewerComponent implements OnInit {
     }
     setDatatoViewer(item) {
 
-        
+
         this.activedoc = item.id;
         let docdata = (item.docdata != '{}' || item.docdata != null || item.docdata != undefined) ? JSON.parse(item.docdata) : item.docdata;
         let valuedata = (item.valuedata != '{}' || item.valuedata != null || item.valuedata != undefined) ? JSON.parse(item.valuedata) : item.valuedata;
@@ -126,7 +128,7 @@ export class ViewerComponent implements OnInit {
     }
     makeData(data) {
 
-        
+
         if (data.length > 0) {
             let docdetail = data[0];
             let tempUrl = JSON.parse(docdetail.url);
@@ -154,7 +156,41 @@ export class ViewerComponent implements OnInit {
         }
     }
 
-    onSignatureCreate(event){
-        
+    onSignatureCreate(event) {
+        debugger;
+        this.confirmmsg.confirm({
+            message: 'Do you want to save this signature for future purpose?',
+            header: 'Delete Confirmation',
+            icon: 'pi pi-info-circle',
+            accept: () => {
+                this.uploadSignature(event, true);
+            },
+            reject: () => {
+                this.uploadSignature(event, false);
+            }
+        });
+
+    }
+
+    uploadSignature(event, saaveInDB) {
+
+        console.log(event, saaveInDB);
+        return;
+        this.signviewer.saveSignature({
+            'img': event.base64,
+            'name': event.name,
+            'emailid': this.global.getUser().email,
+            'title': "",
+            'desc': "",
+            'type': 'signature',
+            'userid': this.global.getUser().id
+        }).subscribe((data: any) => {
+            debugger;
+            if (data.resultKey == 1) {
+                this.viewer.signUploaded(true, { name: event.name, url: this.filePath + data.resultValue.path }, event.controlid);
+            } else {
+                console.log("Error while uploading signature");
+            }
+        })
     }
 }

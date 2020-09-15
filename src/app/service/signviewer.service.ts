@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {DataService} from '../service/dataservice-service';
+import { DataService } from '../service/dataservice-service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,11 +10,13 @@ export class SignviewerService {
   getDocumnet(req: any) {
     return this.dataservice.getHttpData('/signviewer', req);
   }
-  checkSignvieweruser (req:any){
+  checkSignvieweruser(req: any) {
     return this.dataservice.getHttpData('/signviewer', req);
   }
-  postData (req:any){
-     
+  postData(req: any) {
     return this.dataservice.postHttpData('/signviewer', req);
+  }
+  saveSignature(req: any) {
+    return this.dataservice.postHttpData('/uploadsignature', req);
   }
 }
