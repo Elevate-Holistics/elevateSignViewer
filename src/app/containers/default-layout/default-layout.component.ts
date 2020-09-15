@@ -165,25 +165,7 @@ export class DefaultLayoutComponent implements OnInit, OnDestroy {
     }
 
 
-    this.menuservice.getMenu({
-      'type': 'usermenus',
-      'userid': this.global.getUser().id,
-      'usertype': 1
-      // this.global.getUser().usertype
-    }).subscribe(
-      data => {
-
-        if (data.resultKey === 1) {
-
-          this.navItems = common.menubind(data.resultValue);
-
-
-        }
-      },
-      error => {
-        console.error('Error processing request');
-      }
-    );
+  
 
     //this.getFavmenu();
 
