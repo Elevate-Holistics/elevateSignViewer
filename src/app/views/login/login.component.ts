@@ -142,6 +142,7 @@ export class LoginComponent implements OnInit {
   envid:any='';
   docid:any=''; 
   cmpid:any='';
+  disableSignin:boolean=true;
   constructor(private router: Router,
     private loginService: LoginApiService,
     private toastr: ToastrService, private translate: TranslateService,
@@ -187,10 +188,15 @@ export class LoginComponent implements OnInit {
     }
     return true;
   };
+  checkCredintial(){
+    if(this.objlogindtl.username != '' && this.objlogindtl.password != ''){
+      this.disableSignin = false;
+    }
+  }
 
-
-  login( ) {
+  login() {
     debugger
+    this.disableSignin=true;
     this.signviewer.checkSignvieweruser({
       "operate": 'login',
       "email": this.objlogindtl.username,
@@ -201,20 +207,31 @@ export class LoginComponent implements OnInit {
     }).subscribe((data: any) => {
       
       if(data.resultKey ==1 ){
-      let _data = data.resultValue[0];
-      const user: UserModel = {
-        email: _data.email,
-        key: _data.key,
-        id:_data.id
-      };
- 
-      this.global.setUser(user);
+
+        if(data.resultValue.length == 0 ){
+          this.message.show('Error', 'Wrong Credintials!', 'error', this.translate);
+          this.disableSignin=false;
+          this. objlogindtl = new LoginDetail();
+          return;
+        }else {
+          let _data = data.resultValue[0];
+          const user: UserModel = {
+            email: _data.email,
+            key: _data.key,
+            id:_data.id
+          };
+     
+          this.global.setUser(user);
+         
+          let url = this.global.getBackURL();
+          this.router.navigate([url]);
+
+        }
       
-      let url = this.global.getBackURL();
-      this.router.navigate([url]);
 
 
     }
+    this.disableSignin=false;
     })
   }
 
