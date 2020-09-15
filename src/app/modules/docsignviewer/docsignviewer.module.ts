@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ViewerComponent } from './viewer/viewer.component';
-import {DocsignviewerRoutingModule} from '../docsignviewer/docsignviewer-routing.module';
+import { DocsignviewerRoutingModule } from '../docsignviewer/docsignviewer-routing.module';
 import { iViewerModule } from "esigndoccontrol";
-import {SharedModule} from '../../shared/shared.module';
+import { SharedModule } from '../../shared/shared.module';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ErrorpageComponent } from './errorpage/errorpage.component';
 @NgModule({
   declarations: [ViewerComponent, ErrorpageComponent],
@@ -11,7 +12,8 @@ import { ErrorpageComponent } from './errorpage/errorpage.component';
     CommonModule,
     DocsignviewerRoutingModule,
     iViewerModule,
-    SharedModule
+    SharedModule,
+    ConfirmDialogModule
   ]
 })
 export class DocsignviewerModule { }
