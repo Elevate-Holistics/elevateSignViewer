@@ -92,7 +92,7 @@ export class ViewerComponent implements OnInit {
 
 
         this.activedoc = item.id;
-        let docdata = (item.docdata != '{}' || item.docdata != null || item.docdata != undefined) ? JSON.parse(item.docdata) : item.docdata;
+        let docdata = (item.actualvaluedata != '{}' || item.actualvaluedata != null || item.actualvaluedata != undefined) ? JSON.parse(item.actualvaluedata) : item.actualvaluedata;
         let valuedata = (item.valuedata != '{}' || item.valuedata != null || item.valuedata != undefined) ? JSON.parse(item.valuedata) : item.valuedata;
 
         console.log('docdata', docdata);
