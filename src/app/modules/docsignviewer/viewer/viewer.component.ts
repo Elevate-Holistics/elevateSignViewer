@@ -121,7 +121,6 @@ export class ViewerComponent implements OnInit {
 
     }
     bindDocumentDetails(templateid) {
-debugger
         this.signviewer.getDocumnet({
             "operate": 'docdetail',
             "dmid": this.envid,
@@ -167,7 +166,7 @@ debugger
     }
 
     onSignatureCreate(event) {
-        debugger;
+        this.viewer.signUploaded(true, { name: event.name, url: "" }, event.controlid);
         this.confirmmsg.confirm({
             message: 'Do you want to save this signature for future purpose?',
             header: 'Delete Confirmation',
@@ -182,10 +181,7 @@ debugger
 
     }
 
-    uploadSignature(event, saaveInDB) {
-
-        console.log(event, saaveInDB);
-        return;
+    uploadSignature(event, saveInDB) {
         this.signviewer.saveSignature({
             'img': event.base64,
             'name': event.name,
@@ -193,9 +189,10 @@ debugger
             'title': "",
             'desc': "",
             'type': 'signature',
+            'dbsave': saveInDB,
+            'cmpid': this.cmpid,
             'userid': this.global.getUser().id
         }).subscribe((data: any) => {
-            debugger;
             if (data.resultKey == 1) {
                 this.viewer.signUploaded(true, { name: event.name, url: this.filePath + data.resultValue.path }, event.controlid);
             } else {
