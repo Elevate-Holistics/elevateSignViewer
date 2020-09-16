@@ -704,12 +704,10 @@ padding: 4px;
 
 
 .ui-dialog {
-  position: absolute;
-  top: 0;
-  left: 0;
+  position: absolute; 
   padding: .2em;
 outline: 0;
-z-index: 1111;
+z-index: 999;
 }
 .ui-dialog .ui-dialog-titlebar {
   padding: .4em 1em;
@@ -1045,4 +1043,7 @@ body .ui-dataview .ui-dataview-content{
   box-sizing: border-box;
   text-indent: -9999px;
   white-space: nowrap;
+}
+.ui-dialog-mask.ui-widget-overlay{
+  z-index: 100001;
 }

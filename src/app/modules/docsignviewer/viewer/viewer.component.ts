@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { iDocsigneditorComponent, iDocsignviewerComponent } from 'esigndoccontrol';
-//import { iDocsigneditorComponent, iDocsignviewerComponent } from '/Users/pratiknaik/Work/i2t/DocEditor/idoceditor/dist/esigndoccontrol';
+// import { iDocsigneditorComponent, iDocsignviewerComponent } from '/Users/pratiknaik/Work/i2t/DocEditor/idoceditor/dist/esigndoccontrol';
 
 import { SignviewerService } from '../../../service/signviewer.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -65,10 +65,10 @@ export class ViewerComponent implements OnInit {
     }
     onFinished(e) {
         let v = this.viewer.validate(this.currentView)
-        if(v.length > 0){
+        if (v.length > 0) {
             return
         }
-        
+
         let data = this.viewer.getValues(this.currentView);
         this.signviewer.postData({
             'operate': 'finish',
@@ -81,7 +81,7 @@ export class ViewerComponent implements OnInit {
         }).subscribe((data: any) => {
 
         })
-        
+
     }
 
     onCancel(e) {
@@ -187,7 +187,7 @@ export class ViewerComponent implements OnInit {
     }
 
     onSignatureCreate(event) {
-        this.viewer.signUploaded(true, { name: event.name, url: "" }, event.controlid);
+        //   this.viewer.signUploaded(true, { name: event.name, url: "" }, event.controlid);
         this.confirmmsg.confirm({
             message: 'Do you want to save this signature for future purpose?',
             header: 'Delete Confirmation',
@@ -215,7 +215,10 @@ export class ViewerComponent implements OnInit {
             'userid': this.global.getUser().id
         }).subscribe((data: any) => {
             if (data.resultKey == 1) {
-                this.viewer.signUploaded(true, { name: event.name, url: this.filePath + data.resultValue.path }, event.controlid);
+                debugger
+                this.viewer.signUploaded(true,
+                    { name: event.name, url: this.filePath + data.resultValue.path },
+                    event.props);
             } else {
                 console.log("Error while uploading signature");
             }
