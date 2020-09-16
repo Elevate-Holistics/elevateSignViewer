@@ -8,8 +8,9 @@ import { iViewerModule } from "esigndoccontrol";
 import { SharedModule } from '../../shared/shared.module';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ErrorpageComponent } from './errorpage/errorpage.component';
+import { CompletedComponent } from './completed/completed.component';
 @NgModule({
-  declarations: [ViewerComponent, ErrorpageComponent],
+  declarations: [ViewerComponent, ErrorpageComponent, CompletedComponent],
   imports: [
     CommonModule,
     DocsignviewerRoutingModule,
