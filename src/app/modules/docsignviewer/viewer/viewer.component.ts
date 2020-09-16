@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { iDocsigneditorComponent, iDocsignviewerComponent } from 'esigndoccontrol';
+//import { iDocsigneditorComponent, iDocsignviewerComponent } from '/Users/pratiknaik/Work/i2t/DocEditor/idoceditor/dist/esigndoccontrol';
 
 import { SignviewerService } from '../../../service/signviewer.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -18,7 +19,7 @@ export class ViewerComponent implements OnInit {
     options = {
         fonts: []
     }
-
+    currentView = '';
     activedoc: any = '';
     doclist: any = [];
     defaultDocdata = '';
@@ -63,9 +64,12 @@ export class ViewerComponent implements OnInit {
         // }, 100);
     }
     onFinished(e) {
-        let data = this.viewer.getValues();
-        console.log(data);
-
+        let v = this.viewer.validate(this.currentView)
+        if(v.length > 0){
+            return
+        }
+        
+        let data = this.viewer.getValues(this.currentView);
         this.signviewer.postData({
             'operate': 'finish',
             'dmid': this.envid,
@@ -77,7 +81,7 @@ export class ViewerComponent implements OnInit {
         }).subscribe((data: any) => {
 
         })
-        this.onSignatureCreate(null);
+        
     }
 
     onCancel(e) {
@@ -97,7 +101,8 @@ export class ViewerComponent implements OnInit {
 
         console.log('docdata', docdata);
         console.log('valuedata', valuedata);
-        this.viewer.setData(item.src, docdata, "Doctor");
+        this.currentView = item.key;
+        this.viewer.setData(item.src, docdata, item.key);
         // this.router.navigate(['/sign/2/' + this.envid + '/' + item.drid]);
 
         //  this.viewer.setVisibility();
