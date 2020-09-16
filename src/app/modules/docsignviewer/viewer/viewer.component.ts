@@ -7,6 +7,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalService } from '../../../service/global.service';
 import { Location } from '@angular/common';
 import { ConfirmationService } from 'primeng/api';
+import { ToastService } from '../../../service/toast-service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-viewer',
@@ -30,7 +32,7 @@ export class ViewerComponent implements OnInit {
     cmpid: string = '';
     docid: string = '';
     constructor(private signviewer: SignviewerService, private activatedRoute: ActivatedRoute,
-        private router: Router, private global: GlobalService, private location: Location, private confirmmsg: ConfirmationService,) { }
+        private router: Router, private global: GlobalService, private location: Location, private confirmmsg: ConfirmationService,private message: ToastService, private translate: TranslateService) { }
 
     ngOnInit() {
 
@@ -79,7 +81,10 @@ export class ViewerComponent implements OnInit {
             "key": this.global.getUser().key
 
         }).subscribe((data: any) => {
-
+            if (data.resultKey == 1) {
+                this.message.show('Success', 'Saved', 'success', this.translate);
+                this.router.navigate(['sign/complete']);
+            }
         })
 
     }
