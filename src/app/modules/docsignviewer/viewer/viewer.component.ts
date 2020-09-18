@@ -28,18 +28,18 @@ export class ViewerComponent implements OnInit {
     // [{name: 'Document Subject D Subject Herer ajjl',id: 1,status_icon: 'fa-warning',status_color: 'rgb(224, 120, 0)',extra: {}}, {name: 'DCS Subject D Subject Herer ajjl',status_icon: 'fa-check',status_color: 'rgb(0, 184, 92)',id: 2,extra: {}}]
     filePath = '';
     pdfSrc = "assets/sdlc.pdf";
-    envid: string = '';
+    dmid: string = '';
     cmpid: string = '';
-    docid: string = '';
+    drid: string = '';
     constructor(private signviewer: SignviewerService, private activatedRoute: ActivatedRoute,
         private router: Router, private global: GlobalService, private location: Location, private confirmmsg: ConfirmationService,private message: ToastService, private translate: TranslateService) { }
 
     ngOnInit() {
 
 
-        this.envid = this.activatedRoute.snapshot.paramMap.get('envid');
+        this.dmid = this.activatedRoute.snapshot.paramMap.get('envid');
         this.cmpid = this.activatedRoute.snapshot.paramMap.get('cmpid');
-        this.docid = this.activatedRoute.snapshot.paramMap.get('docid');
+        this.drid = this.activatedRoute.snapshot.paramMap.get('docid');
 
         this.activedoc = this.activatedRoute.snapshot.paramMap.has('docid') ? this.activatedRoute.snapshot.paramMap.get('docid') : 0;
 
@@ -71,12 +71,19 @@ export class ViewerComponent implements OnInit {
             return
         }
 
-        let data = this.viewer.getValues(this.currentView);
+        let valueData = this.viewer.getValues(this.currentView);
+
+        let data= {
+            'dmid': this.dmid,
+            'drid': this.drid,
+            'valuedata':valueData
+
+        }
         this.signviewer.postData({
             'operate': 'finish',
-            'dmid': this.envid,
-            'drid': this.docid,
-            'data': data,
+            'dmid': this.dmid,
+            'drid': this.drid,
+            'data': valueData,
             'cmpid': 'cmp' + this.cmpid,
             "key": this.global.getUser().key
 
@@ -108,7 +115,7 @@ export class ViewerComponent implements OnInit {
         console.log('valuedata', valuedata);
         this.currentView = item.key;
         this.viewer.setData(item.src, docdata, item.key);
-        // this.router.navigate(['/sign/2/' + this.envid + '/' + item.drid]);
+        // this.router.navigate(['/sign/2/' + this.dmid + '/' + item.drid]);
 
         //  this.viewer.setVisibility();
 
@@ -118,22 +125,22 @@ export class ViewerComponent implements OnInit {
 
         this.signviewer.getDocumnet({
             "operate": 'list',
-            "dmid": this.envid,
+            "dmid": this.dmid,
             "cmpid": "cmp" + this.cmpid,
-            "templateid": this.activatedRoute.snapshot.paramMap.has('docid') ? this.docid : null,
+            "templateid": this.activatedRoute.snapshot.paramMap.has('docid') ? this.drid : null,
             "key": this.global.getUser().key
         }).subscribe((data) => {
             if (data.resultKey == 1) {
                 if (data.resultValue.length == 0) {
                     this.global.removeUser();
-                    this.router.navigate(['/sign/' + this.cmpid + '/' + this.envid + '/' + this.docid]);
+                    this.router.navigate(['/sign/' + this.cmpid + '/' + this.dmid + '/' + this.drid]);
                     // this.global.setBackurl();
 
                 }
                 else {
 
                     this.doclist = data.resultValue;
-                    this.bindDocumentDetails(this.docid);
+                    this.bindDocumentDetails(this.drid);
                 }
 
             }
@@ -148,7 +155,7 @@ export class ViewerComponent implements OnInit {
         debugger
         this.signviewer.getDocumnet({
             "operate": 'docdetail',
-            "dmid": this.envid,
+            "dmid": this.dmid,
             "cmpid": "cmp" + this.cmpid,
             "templateid": templateid,
             "key": this.global.getUser().key
