@@ -19,4 +19,7 @@ export class SignviewerService {
   saveSignature(req: any) {
     return this.dataservice.postHttpData('/uploadsignature', req);
   }
+  processData(req: any) {
+    return this.dataservice.postHttpData('/document/process', req);
+  }
 }
