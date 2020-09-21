@@ -14,18 +14,18 @@ const routes: Routes = [
   
   
       children: [
-        {
-          path: ':cmpid/:envid',
-          component: ViewerComponent,
-          canActivate: [AuthGuard],
-          data: {
-            title: 'Sign',
-            code: 'sign'
+        // {
+        //   path: ':cmpid/:dmid/:emailid',
+        //   component: ViewerComponent,
+        //   canActivate: [AuthGuard],
+        //   data: {
+        //     title: 'Sign',
+        //     code: 'sign'
   
-          }
-        },
+        //   }
+        // },
         {
-          path: ':cmpid/:envid/:docid',
+          path: ':cmpid/:dmid/:drid/:emailid',
           component: ViewerComponent,
           canActivate: [AuthGuard],
           data: {
