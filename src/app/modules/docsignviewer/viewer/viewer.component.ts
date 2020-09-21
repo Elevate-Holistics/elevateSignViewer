@@ -31,17 +31,18 @@ export class ViewerComponent implements OnInit {
     dmid: string = '';
     cmpid: string = '';
     drid: string = '';
+    emailid:any='';
     constructor(private signviewer: SignviewerService, private activatedRoute: ActivatedRoute,
         private router: Router, private global: GlobalService, private location: Location, private confirmmsg: ConfirmationService,private message: ToastService, private translate: TranslateService) { }
 
     ngOnInit() {
+debugger
 
-
-        this.dmid = this.activatedRoute.snapshot.paramMap.get('envid');
+        this.dmid = this.activatedRoute.snapshot.paramMap.get('dmid');
         this.cmpid = this.activatedRoute.snapshot.paramMap.get('cmpid');
-        this.drid = this.activatedRoute.snapshot.paramMap.get('docid');
-
-        this.activedoc = this.activatedRoute.snapshot.paramMap.has('docid') ? this.activatedRoute.snapshot.paramMap.get('docid') : 0;
+        this.drid = this.activatedRoute.snapshot.paramMap.get('drid');
+this.emailid=this.activatedRoute.snapshot.paramMap.get('emailid');
+        this.activedoc = this.activatedRoute.snapshot.paramMap.has('drid') ? this.activatedRoute.snapshot.paramMap.get('drid') : 0;
 
         // this.filePath="https://bucket-cmp" + this.global.getCompany() + ".s3.us-east-2.amazonaws.com/"
         this.filePath = "https://bucket-cmp" + this.cmpid + ".s3.us-east-2.amazonaws.com/"
@@ -89,6 +90,7 @@ export class ViewerComponent implements OnInit {
 
         }).subscribe((data: any) => {
             if (data.resultKey == 1) {
+                debugger
                 this.message.show('Success', 'Saved', 'success', this.translate);
                 this.router.navigate(['sign/complete']);
             }
@@ -105,10 +107,10 @@ export class ViewerComponent implements OnInit {
         this.bindDocumentDetails(item.drid);
     }
     setDatatoViewer(item) {
-
+ 
 
         this.activedoc = item.id;
-        let docdata = (item.actualvaluedata != '{}' || item.actualvaluedata != null || item.actualvaluedata != undefined) ? JSON.parse(item.actualvaluedata) : item.actualvaluedata;
+        let docdata = (item.docdata != '{}' || item.docdata != null || item.docdata != undefined) ? JSON.parse(item.docdata) : item.docdata;
         let valuedata = (item.valuedata != '{}' || item.valuedata != null || item.valuedata != undefined) ? JSON.parse(item.valuedata) : item.valuedata;
 
         console.log('docdata', docdata);
@@ -122,12 +124,12 @@ export class ViewerComponent implements OnInit {
     }
 
     bindDocumentsList() {
-
+ 
         this.signviewer.getDocumnet({
             "operate": 'list',
             "dmid": this.dmid,
             "cmpid": "cmp" + this.cmpid,
-            "templateid": this.activatedRoute.snapshot.paramMap.has('docid') ? this.drid : null,
+            "templateid": this.activatedRoute.snapshot.paramMap.has('drid') ? this.drid : null,
             "key": this.global.getUser().key
         }).subscribe((data) => {
             if (data.resultKey == 1) {
@@ -169,7 +171,7 @@ export class ViewerComponent implements OnInit {
         })
     }
     makeData(data) {
-
+debugger
 
         if (data.length > 0) {
             let docdetail = data[0];
@@ -194,7 +196,8 @@ export class ViewerComponent implements OnInit {
 
 
         } else {
-            this.router.navigate(['/sign/error']);
+             
+            this.router.navigate(['/sign/complete']);
         }
     }
 
