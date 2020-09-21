@@ -46,6 +46,7 @@ export class GlobalService {
     public btnStyle = 0;
     user: any = {};
     backUrl: any = '';
+    emailid: '';
     companyDispData: any = 0;
     loader: Boolean = false;
     loadertext: String = 'LOADING';
@@ -152,7 +153,7 @@ export class GlobalService {
 
     public getUser(): UserModel {
 
-        const _us = localStorage.getItem('user');
+        const _us = sessionStorage.getItem('user');
         if (_us != null) {
             this.user = JSON.parse(_us);
         } else {
@@ -163,21 +164,28 @@ export class GlobalService {
 
 
     public getBackURL() {
-
+        const url = sessionStorage.getItem('backurl');
+        if (url != null) {
+            this.backUrl = url;
+        } else {
+            this.backUrl = {};
+        }
         return this.backUrl;
+      //  return this.backUrl;
     }
 
-    public setBackurl(url) {
-        this.backUrl = url;
+    public setBackurl(url ) {
+        sessionStorage.setItem('backurl', JSON.stringify(url));
+        //this.backUrl = url;
     }
 
 
     public setUser(value: UserModel) {
         this.user = value;
-        localStorage.setItem('user', JSON.stringify(value));
+        sessionStorage.setItem('user', JSON.stringify(value));
     }
-   public removeUser() {
-    localStorage.removeItem('user');
+    public removeUser() {
+        sessionStorage.removeItem('user');
     }
 
     public setEnvData(value: EnvData) {
