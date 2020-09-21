@@ -182,15 +182,13 @@ export class LoginComponent implements OnInit {
     //this.bindLang();
   }
   ngAfterViewInit(): void {
-     if(this.global.getBackURL.length > 1){
-      let url=this.global.getBackURL();
-      if(url.split('/')[5].includes('@')){
-       this.emailid=url.split('/')[5].slice(0, -1);;
-       this.objlogindtl.username=this.emailid;
-      }
      
-     }
-     
+       let url=this.global.getBackURL();
+       if(url.split('/')[5].includes('@')){
+        this.emailid=url.split('/')[5].slice(0, -1);;
+        this.objlogindtl.username=this.emailid;
+       }
+      
       
      
   }
