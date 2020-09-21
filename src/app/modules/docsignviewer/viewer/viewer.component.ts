@@ -32,6 +32,7 @@ export class ViewerComponent implements OnInit {
     cmpid: string = '';
     drid: string = '';
     emailid:any='';
+    recpid:any='';
     constructor(private signviewer: SignviewerService, private activatedRoute: ActivatedRoute,
         private router: Router, private global: GlobalService, private location: Location, private confirmmsg: ConfirmationService,private message: ToastService, private translate: TranslateService) { }
 
@@ -73,20 +74,20 @@ this.emailid=this.activatedRoute.snapshot.paramMap.get('emailid');
         }
 
         let valueData = this.viewer.getValues(this.currentView);
-
+debugger
         let data= {
             'dmid': this.dmid,
             'drid': this.drid,
+            'recpid':this.recpid,
             'valuedata':valueData
 
         }
-        this.signviewer.postData({
-            'operate': 'finish',
-            'dmid': this.dmid,
-            'drid': this.drid,
-            'data': valueData,
+        this.signviewer.processData({
+            'operate': 'process',
+           'data': data,
             'cmpid': 'cmp' + this.cmpid,
-            "key": this.global.getUser().key
+            "key": this.global.getUser().key,
+            "userid":'ba3078a8-ec11-4aeb-953d-3513c05d203d'
 
         }).subscribe((data: any) => {
             if (data.resultKey == 1) {
@@ -175,6 +176,7 @@ debugger
 
         if (data.length > 0) {
             let docdetail = data[0];
+            this.recpid=docdetail.recpid;
             let tempUrl = JSON.parse(docdetail.url);
             let url = tempUrl.doc;
 
