@@ -139,9 +139,10 @@ export class LoginComponent implements OnInit {
   objlogindtl = new LoginDetail();
   lang: any = [];
   helper = {};
-  envid:any='';
-  docid:any=''; 
+  dmid:any='';
+  drid:any=''; 
   cmpid:any='';
+  emailid:any='';
   disableSignin:boolean=true;
   constructor(private router: Router,
     private loginService: LoginApiService,
@@ -169,15 +170,30 @@ export class LoginComponent implements OnInit {
   };
 
   ngOnInit() {
-
-    this.envid = this.activatedRoute.snapshot.paramMap.get('envid');
+  
+ 
+    this.dmid = this.activatedRoute.snapshot.paramMap.get('envid');
     this.cmpid = this.activatedRoute.snapshot.paramMap.get('cmpid');
-    this.docid  = this.activatedRoute.snapshot.paramMap.get('docid');
+    this.drid  = this.activatedRoute.snapshot.paramMap.get('docid');
+  //  this.emailid=this.activatedRoute.snapshot.paramMap.get('emailid');
+  this.emailid=this.global.getBackURL().emailid;
     $('#username').focus();
    // this.checkIfUserLoggedIn();
     //this.bindLang();
   }
-
+  ngAfterViewInit(): void {
+     if(this.global.getBackURL.length > 1){
+      let url=this.global.getBackURL();
+      if(url.split('/')[5].includes('@')){
+       this.emailid=url.split('/')[5].slice(0, -1);;
+       this.objlogindtl.username=this.emailid;
+      }
+     
+     }
+     
+      
+     
+  }
   validation = function () {
     if (this.objlogindtl.username === '') {
       this.toastr.error(this.helper.translate(this.translate, 'loginlogin'), this.helper.translate(this.translate, 'regreg'));
@@ -195,7 +211,7 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    debugger
+     
     this.disableSignin=true;
     this.signviewer.checkSignvieweruser({
       "operate": 'login',
@@ -223,8 +239,9 @@ export class LoginComponent implements OnInit {
      
           this.global.setUser(user);
          
-          let url = this.global.getBackURL();
-          this.router.navigate([url]);
+        let url = this.global.getBackURL() ;
+         let _url =url.split('"').join('');
+          this.router.navigate([_url]);
 
         }
       
