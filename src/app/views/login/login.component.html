@@ -69,7 +69,7 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text"><i class="icon-lock"></i></span>
                   </div>
-                  <input type="password" name="password" [(ngModel)]="objlogindtl.password" class="form-control" (input)="checkCredintial()"
+                  <input type="password" name="password" id="password" [(ngModel)]="objlogindtl.password" class="form-control" (input)="checkCredintial()"
                     placeholder="One time password" autocomplete="current-password" #password="ngModel"
                     [ngClass]="{ 'is-invalid': (password.dirty ) &&  password.invalid }" required>
                 </div>
