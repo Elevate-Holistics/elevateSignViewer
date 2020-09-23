@@ -187,6 +187,7 @@ export class LoginComponent implements OnInit {
        if(url.split('/')[5].includes('@')){
         this.emailid=url.split('/')[5].slice(0, -1);;
         this.objlogindtl.username=this.emailid;
+        $('#password').focus();
        }
       
       
@@ -234,7 +235,7 @@ export class LoginComponent implements OnInit {
             key: _data.key,
             id:_data.id
           };
-     
+           this.global.setIslogin(true);
           this.global.setUser(user);
          
         let url = this.global.getBackURL() ;
