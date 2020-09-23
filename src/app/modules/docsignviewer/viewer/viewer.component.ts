@@ -47,10 +47,11 @@ this.emailid=this.activatedRoute.snapshot.paramMap.get('emailid');
 
         // this.filePath="https://bucket-cmp" + this.global.getCompany() + ".s3.us-east-2.amazonaws.com/"
         this.filePath = "https://bucket-cmp" + this.cmpid + ".s3.us-east-2.amazonaws.com/"
-        this.bindDocumentsList();
+       // this.bindDocumentsList();
     }
 
     ngAfterViewInit(): void {
+        this.bindDocumentDetails(this.drid);
         this.viewer.addSignatureFonts([{
             name: '\'Great Vibes\'',
             url: 'https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap'
@@ -93,7 +94,7 @@ debugger
             if (data.resultKey == 1) {
                 debugger
                 this.message.show('Success', 'Saved', 'success', this.translate);
-                this.router.navigate(['sign/complete']);
+                this.router.navigate(['sign/complete/f']);
             }
         })
 
@@ -172,7 +173,7 @@ debugger
         })
     }
     makeData(data) {
-debugger
+ 
 
         if (data.length > 0) {
             let docdetail = data[0];
@@ -197,9 +198,9 @@ debugger
             console.log(this.doclist);
 
 
-        } else {
+        } else if(data.length <= 0) {
              
-            this.router.navigate(['/sign/complete']);
+            this.router.navigate(['/sign/complete/a']);
         }
     }
 
