@@ -46,7 +46,7 @@ const routes: Routes = [
           }
         },
         {
-          path: 'complete',
+          path: 'complete/:type',
           component: CompletedComponent,
           canActivate: [AuthGuard],
           data: {
