@@ -179,6 +179,14 @@ export class GlobalService {
         //this.backUrl = url;
     }
 
+  public  setIslogin(flag){
+        sessionStorage.setItem('islogin', flag);
+    }
+    public getIslogin(){
+        let flag;
+        flag = sessionStorage.getItem('islogin')
+       return flag;
+    }
 
     public setUser(value: UserModel) {
         this.user = value;
