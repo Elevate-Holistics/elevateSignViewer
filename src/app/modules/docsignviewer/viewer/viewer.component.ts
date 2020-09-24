@@ -31,23 +31,23 @@ export class ViewerComponent implements OnInit {
     dmid: string = '';
     cmpid: string = '';
     drid: string = '';
-    emailid:any='';
-    recpid:any='';
+    emailid: any = '';
+    recpid: any = '';
     constructor(private signviewer: SignviewerService, private activatedRoute: ActivatedRoute,
-        private router: Router, private global: GlobalService, private location: Location, private confirmmsg: ConfirmationService,private message: ToastService, private translate: TranslateService) { }
+        private router: Router, private global: GlobalService, private location: Location, private confirmmsg: ConfirmationService, private message: ToastService, private translate: TranslateService) { }
 
     ngOnInit() {
-debugger
+        debugger
 
         this.dmid = this.activatedRoute.snapshot.paramMap.get('dmid');
         this.cmpid = this.activatedRoute.snapshot.paramMap.get('cmpid');
         this.drid = this.activatedRoute.snapshot.paramMap.get('drid');
-this.emailid=this.activatedRoute.snapshot.paramMap.get('emailid');
+        this.emailid = this.activatedRoute.snapshot.paramMap.get('emailid');
         this.activedoc = this.activatedRoute.snapshot.paramMap.has('drid') ? this.activatedRoute.snapshot.paramMap.get('drid') : 0;
 
         // this.filePath="https://bucket-cmp" + this.global.getCompany() + ".s3.us-east-2.amazonaws.com/"
         this.filePath = "https://bucket-cmp" + this.cmpid + ".s3.us-east-2.amazonaws.com/"
-       // this.bindDocumentsList();
+        // this.bindDocumentsList();
     }
 
     ngAfterViewInit(): void {
@@ -75,20 +75,20 @@ this.emailid=this.activatedRoute.snapshot.paramMap.get('emailid');
         }
 
         let valueData = this.viewer.getValues(this.currentView);
-debugger
-        let data= {
+        debugger
+        let data = {
             'dmid': this.dmid,
             'drid': this.drid,
-            'recpid':this.recpid,
-            'valuedata':valueData
+            'recpid': this.recpid,
+            'valuedata': valueData
 
         }
         this.signviewer.processData({
             'operate': 'process',
-           'data': data,
+            'data': data,
             'cmpid': 'cmp' + this.cmpid,
             "key": this.global.getUser().key,
-            "userid":'ba3078a8-ec11-4aeb-953d-3513c05d203d'
+            "userid": 'ba3078a8-ec11-4aeb-953d-3513c05d203d'
 
         }).subscribe((data: any) => {
             if (data.resultKey == 1) {
@@ -109,7 +109,7 @@ debugger
         this.bindDocumentDetails(item.drid);
     }
     setDatatoViewer(item) {
- 
+
 
         this.activedoc = item.id;
         let docdata = (item.docdata != '{}' || item.docdata != null || item.docdata != undefined) ? JSON.parse(item.docdata) : item.docdata;
@@ -126,7 +126,7 @@ debugger
     }
 
     bindDocumentsList() {
- 
+
         this.signviewer.getDocumnet({
             "operate": 'list',
             "dmid": this.dmid,
@@ -156,7 +156,6 @@ debugger
 
     }
     bindDocumentDetails(templateid) {
-        debugger
         this.signviewer.getDocumnet({
             "operate": 'docdetail',
             "dmid": this.dmid,
@@ -165,41 +164,36 @@ debugger
             "key": this.global.getUser().key
         }).subscribe((data) => {
             if (data.resultKey == 1) {
-
                 this.makeData(data.resultValue);
             }
-
-
         })
     }
     makeData(data) {
- 
-
         if (data.length > 0) {
             let docdetail = data[0];
-            this.recpid=docdetail.recpid;
+            this.recpid = docdetail.recpid;
             let tempUrl = JSON.parse(docdetail.url);
-            let url = tempUrl.doc;
+            let url = this.filePath + tempUrl.doc;
+            docdetail.src = url;
+            // let result = this.doclist.find((a) => {
+            //     if (a.id == docdetail.id) {
 
-            let result = this.doclist.find((a) => {
-                if (a.id == docdetail.id) {
-
-                    a.src = this.filePath + url;
-                    return a;
-                }
-            })
-
-
-            if (result != undefined) {
-                this.setDatatoViewer(result);
-            }
+            //         a.src = this.filePath + url;
+            //         return a;
+            //     }
+            // })
 
 
-            console.log(this.doclist);
+            // if (result != undefined) {
+            this.setDatatoViewer(docdetail);
+            // }
 
 
-        } else if(data.length <= 0) {
-             
+            // console.log(this.doclist);
+
+
+        } else if (data.length <= 0) {
+
             this.router.navigate(['/sign/complete/a']);
         }
     }
