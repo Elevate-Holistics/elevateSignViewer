@@ -30,7 +30,9 @@
     "uat": "ng build -c uat --aot --named-chunks --build-optimizer --vendor-chunk --output-hashing bundles --extract-css true --base-href /viewer/",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "awsbuild": "ng build --prod --aot --named-chunks --build-optimizer --vendor-chunk --output-hashing all --extract-css true --base-href /",
+    "aws-deploy": "npm run awsbuild && aws s3 rm s3://elevatesign --recursive && aws s3 sync dist/ s3://elevatesign"
   },
   "private": true,
   "dependencies": {
