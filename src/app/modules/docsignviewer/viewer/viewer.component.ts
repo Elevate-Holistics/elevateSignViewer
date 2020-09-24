@@ -86,7 +86,7 @@ debugger
         this.signviewer.processData({
             'operate': 'process',
            'data': data,
-            'cmpid': 'cmp' + this.cmpid,
+            'cmpid': this.cmpid,
             "key": this.global.getUser().key,
             "userid":'ba3078a8-ec11-4aeb-953d-3513c05d203d'
 
