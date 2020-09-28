@@ -31,8 +31,10 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "awsbuild": "ng build --prod --aot --named-chunks --build-optimizer --vendor-chunk --output-hashing all --extract-css true --base-href /",
-    "aws-deploy": "npm run awsbuild && aws s3 rm s3://elevatesign --recursive && aws s3 sync dist/ s3://elevatesign"
+    "awsbuilduat": "ng build --uat --aot --named-chunks --build-optimizer --vendor-chunk --output-hashing all --extract-css true --base-href /",
+    "aws-deploy-uat": "npm install && npm run awsbuilduat && aws s3 rm s3://elevatesign --recursive --profile elevateuat && aws s3 sync dist/ s3://elevatesign --profile elevateuat",
+    "awsbuildprod": "ng build --prod --aot --named-chunks --build-optimizer --vendor-chunk --output-hashing all --extract-css true --base-href /",
+    "aws-deploy-live": "npm install && npm run awsbuildprod && aws s3 rm s3://elevate-esign-sign --recursive --profile elevatelive && aws s3 sync dist/ s3://elevate-esign-sign --profile elevatelive"
   },
   "private": true,
   "dependencies": {
