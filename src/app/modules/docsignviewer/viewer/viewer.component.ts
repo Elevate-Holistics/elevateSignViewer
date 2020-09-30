@@ -132,7 +132,9 @@ export class ViewerComponent implements OnInit {
             "dmid": this.dmid,
             "cmpid": "cmp" + this.cmpid,
             "templateid": this.activatedRoute.snapshot.paramMap.has('drid') ? this.drid : null,
-            "key": this.global.getUser().key
+            "key": this.global.getUser().key,
+            "drid":this.drid,
+            "recpid": this.global.getUser().id
         }).subscribe((data) => {
             if (data.resultKey == 1) {
                 if (data.resultValue.length == 0) {
