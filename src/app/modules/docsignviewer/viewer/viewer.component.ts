@@ -85,7 +85,7 @@ export class ViewerComponent implements OnInit {
         }
         this.signviewer.processData({
             'operate': 'process',
-           'data': data,
+            'data': data,
             'cmpid': this.cmpid,
             "key": this.global.getUser().key,
             "userid": 'ba3078a8-ec11-4aeb-953d-3513c05d203d'
@@ -133,7 +133,7 @@ export class ViewerComponent implements OnInit {
             "cmpid": "cmp" + this.cmpid,
             "templateid": this.activatedRoute.snapshot.paramMap.has('drid') ? this.drid : null,
             "key": this.global.getUser().key,
-            "drid":this.drid,
+            "drid": this.drid,
             "recpid": this.global.getUser().id
         }).subscribe((data) => {
             if (data.resultKey == 1) {
@@ -164,7 +164,7 @@ export class ViewerComponent implements OnInit {
             "cmpid": "cmp" + this.cmpid,
             "templateid": templateid,
             "key": this.global.getUser().key,
-            "drid":this.drid,
+            "drid": this.drid,
             "recpid": this.global.getUser().id
         }).subscribe((data) => {
             if (data.resultKey == 1) {
@@ -204,18 +204,18 @@ export class ViewerComponent implements OnInit {
 
     onSignatureCreate(event) {
         //   this.viewer.signUploaded(true, { name: event.name, url: "" }, event.controlid);
-        this.confirmmsg.confirm({
-            message: 'Do you want to save this signature for future purpose?',
-            header: 'Delete Confirmation',
-            icon: 'pi pi-info-circle',
-            accept: () => {
-                this.uploadSignature(event, true);
-            },
-            reject: () => {
-                this.uploadSignature(event, false);
-            }
-        });
-
+        // this.confirmmsg.confirm({
+        //     message: 'Do you want to save this signature for future purpose?',
+        //     header: 'Delete Confirmation',
+        //     icon: 'pi pi-info-circle',
+        //     accept: () => {
+        //         this.uploadSignature(event, true);
+        //     },
+        //     reject: () => {
+        //         this.uploadSignature(event, false);
+        //     }
+        // });
+        this.uploadSignature(event, false);
     }
 
     uploadSignature(event, saveInDB) {
