@@ -118,9 +118,11 @@ export class ViewerComponent implements OnInit {
         item.cval = JSON.parse(item.cval);
 
         let othersInput = {};
-        item.cval.forEach(element => {
-            othersInput = { ...element, ...othersInput }
-        });
+        if (item.cval != null) {
+            item.cval.forEach(element => {
+                othersInput = { ...element, ...othersInput }
+            });
+        }
 
         this.viewer.setData(item.src, docdata, item.key, {}, othersInput);
         // this.router.navigate(['/sign/2/' + this.dmid + '/' + item.drid]);
