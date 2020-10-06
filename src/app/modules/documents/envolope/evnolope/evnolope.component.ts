@@ -147,7 +147,6 @@ export class EvnolopeComponent implements OnInit {
   }
 
   onColumnClick(item) {
-    debugger
     if (this.onColclickid == item.id) {
       return;
     }
@@ -308,7 +307,6 @@ export class EvnolopeComponent implements OnInit {
         this.message.show('Success', 'Saved successfully', 'success', this.translate);
         this.searchstring = '';
         this.isedit = false;
-        debugger
         if (this.form.id == null) {
           let data = {
             id: res.resultValue.msg,
@@ -380,10 +378,9 @@ export class EvnolopeComponent implements OnInit {
 
 
 
- count:any=0;
+  count: any = 0;
   searchTemplates() {
-    debugger
-    this.count=0;
+    this.count = 0;
     // if (this.searchtemplatestring == '' || this.searchtemplatestring == undefined || this.searchtemplatestring == null) {
     //   this.templateList = []
     //   this.noEnvmsg = '';
@@ -395,27 +392,27 @@ export class EvnolopeComponent implements OnInit {
     if (this.searchtemplatestring != '' || this.searchtemplatestring != undefined || this.searchtemplatestring != null) { }
     let temptemplate = this.temptemplateList;
 
-     this.noTemplatefound= false;
-   // this.templateList = [];
-   for (let index = 0; index < this.templateList.length; index++) {
-     const element = this.templateList[index];
-     let name = element.name.toLowerCase();
+    this.noTemplatefound = false;
+    // this.templateList = [];
+    for (let index = 0; index < this.templateList.length; index++) {
+      const element = this.templateList[index];
+      let name = element.name.toLowerCase();
 
-     // name.includes(this.searchtemplatestring.toLowerCase());
-     if(!name.includes(this.searchtemplatestring.toLowerCase())){
-       element.show=false;
-
-
+      // name.includes(this.searchtemplatestring.toLowerCase());
+      if (!name.includes(this.searchtemplatestring.toLowerCase())) {
+        element.show = false;
 
 
-     }
-     else {
-
-      element.show=true;
 
 
-     }
-   }
+      }
+      else {
+
+        element.show = true;
+
+
+      }
+    }
 
 
 
@@ -532,7 +529,6 @@ export class EvnolopeComponent implements OnInit {
   }
 
   addTemplate() {
-    debugger
     let data = this.makeTemplateDate(this.templateList);
 
     console.log(this.templateList);
@@ -563,7 +559,6 @@ export class EvnolopeComponent implements OnInit {
   }
 
   makeTemplateDate(templateList) {
-    //     debugger
     //     let newArray = [];
     //     let idArray = [];
     //     let finalArray = [];

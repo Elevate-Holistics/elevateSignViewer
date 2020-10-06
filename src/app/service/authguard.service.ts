@@ -36,27 +36,26 @@ export class AuthGuard implements CanActivate, CanLoad, CanActivateChild {
     return Observable.create((observer: Subject<boolean>) => {
 
       if (checks.status) {
-        debugger
         let emailid;
         let User;
-  if(!this.global.getIslogin()){
-     
-    User = this.global.getUser();
-    let _url = state.url.split('"').join('');
-    if (_url.split('/')[5].includes('@')) {   
-      emailid = _url.split('/')[5];
-  }
-      
+        if (!this.global.getIslogin()) {
 
-       
-        if (User.email != emailid) {
+          User = this.global.getUser();
+          let _url = state.url.split('"').join('');
+          if (_url.split('/')[5].includes('@')) {
+            emailid = _url.split('/')[5];
+          }
 
-          this.global.setBackurl(state.url);
-          //  localStorage.setItem('backurl', JSON.stringify(state.url));
-          that._router.navigate(['/login']);
-          observer.next(true);
-        }
-       } else {
+
+
+          if (User.email != emailid) {
+
+            this.global.setBackurl(state.url);
+            //  localStorage.setItem('backurl', JSON.stringify(state.url));
+            that._router.navigate(['/login']);
+            observer.next(true);
+          }
+        } else {
           observer.next(true);
         }
 

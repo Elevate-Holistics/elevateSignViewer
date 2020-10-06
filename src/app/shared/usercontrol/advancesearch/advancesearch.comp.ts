@@ -45,7 +45,7 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
     /** end */
 
     ngOnInit(): void {
-      //  this.bindSavedSearch();
+        //  this.bindSavedSearch();
         this.signs = [
             { field: '=', header: 'Is equal to (=)' },
             { field: '<>', header: 'Is Not equal to (<>)' },
@@ -246,7 +246,6 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
     }
 
     getName(event) {
-        debugger;
         this.filterForm.inputValue = event.value;
         this.filterForm.inputText = event.name;
     }
@@ -267,7 +266,7 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
         try {
             this.filterService.create({
                 'id': this.dbTableData.id,
-               // 'createdby': this.global.getUser().id,
+                // 'createdby': this.global.getUser().id,
                 'filterData': this.filterData,
                 'module': this.controlName,
                 'filterName': this.dbTableData.filterName,
@@ -294,7 +293,7 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
 
     bindSavedSearch() {
         this.filterService.getSavedSearch({
-           // 'userid': this.global.getUser().id,
+            // 'userid': this.global.getUser().id,
             'module': this.controlName,
             'type': 'ddl'
         }).subscribe((res: any) => {
@@ -307,7 +306,7 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
     selectSavedSearch(event, iscall) {
         const id = event.target.value;
         this.filterService.getSavedSearch({
-           // 'userid': this.global.getUser().id,
+            // 'userid': this.global.getUser().id,
             'module': this.controlName,
             'type': 'id',
             'id': id

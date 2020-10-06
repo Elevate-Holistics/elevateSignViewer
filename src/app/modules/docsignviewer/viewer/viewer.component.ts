@@ -37,8 +37,6 @@ export class ViewerComponent implements OnInit {
         private router: Router, private global: GlobalService, private location: Location, private confirmmsg: ConfirmationService, private message: ToastService, private translate: TranslateService) { }
 
     ngOnInit() {
-        debugger
-
         this.dmid = this.activatedRoute.snapshot.paramMap.get('dmid');
         this.cmpid = this.activatedRoute.snapshot.paramMap.get('cmpid');
         this.drid = this.activatedRoute.snapshot.paramMap.get('drid');
@@ -75,7 +73,6 @@ export class ViewerComponent implements OnInit {
         }
 
         let valueData = this.viewer.getValues(this.currentView);
-        debugger
         let data = {
             'dmid': this.dmid,
             'drid': this.drid,
@@ -92,7 +89,6 @@ export class ViewerComponent implements OnInit {
 
         }).subscribe((data: any) => {
             if (data.resultKey == 1) {
-                debugger
                 this.message.show('Success', 'Saved', 'success', this.translate);
                 this.router.navigate(['sign/complete/f']);
             }
@@ -118,7 +114,15 @@ export class ViewerComponent implements OnInit {
         console.log('docdata', docdata);
         console.log('valuedata', valuedata);
         this.currentView = item.key;
-        this.viewer.setData(item.src, docdata, item.key);
+
+        item.cval = JSON.parse(item.cval);
+
+        let othersInput = {};
+        item.cval.forEach(element => {
+            othersInput = { ...element, ...othersInput }
+        });
+
+        this.viewer.setData(item.src, docdata, item.key, {}, othersInput);
         // this.router.navigate(['/sign/2/' + this.dmid + '/' + item.drid]);
 
         //  this.viewer.setVisibility();
@@ -231,7 +235,6 @@ export class ViewerComponent implements OnInit {
             'userid': this.global.getUser().id
         }).subscribe((data: any) => {
             if (data.resultKey == 1) {
-                debugger
                 this.viewer.signUploaded(true,
                     { name: event.name, url: this.filePath + data.resultValue.path },
                     event.props);
