@@ -23,7 +23,7 @@ export class EvnolopeComponent implements OnInit {
   showDocpannel: boolean = false;
   uniqueRecepientheadList: any = [];
   RecepientheadList: any = [];
-
+  config: any = [];
   buttons = [];
   form: any = {
     id: null,
@@ -80,9 +80,9 @@ export class EvnolopeComponent implements OnInit {
   filePath: any = '';
   showDocspinner: boolean = false;
   ngOnInit(): void {
-
+    this.config = this.global.getConfig();
     this.srcurl = "";
-    this.filePath = "https://bucket-cmp" + this.global.getCompany() + ".s3.us-east-2.amazonaws.com/";
+    this.filePath = this.global.format(this.config.AWS_BUCKET_PREFIX, [this.global.getCompany()]); //"https://bucket-cmp" + this.global.getCompany() + ".s3.us-east-2.amazonaws.com/";
     console.log(this.filePath);
     // this.getAllTemplate();
     //   this.templateList = [

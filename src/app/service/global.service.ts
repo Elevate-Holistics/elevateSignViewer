@@ -171,21 +171,21 @@ export class GlobalService {
             this.backUrl = {};
         }
         return this.backUrl;
-      //  return this.backUrl;
+        //  return this.backUrl;
     }
 
-    public setBackurl(url ) {
+    public setBackurl(url) {
         sessionStorage.setItem('backurl', JSON.stringify(url));
         //this.backUrl = url;
     }
 
-  public  setIslogin(flag){
+    public setIslogin(flag) {
         sessionStorage.setItem('islogin', flag);
     }
-    public getIslogin(){
+    public getIslogin() {
         let flag;
         flag = sessionStorage.getItem('islogin')
-       return flag;
+        return flag;
     }
 
     public setUser(value: UserModel) {
@@ -512,5 +512,11 @@ export class GlobalService {
         this._envupdated.next(true);
     }
 
+    public format(a: string, b: any[]) {
+        for (const k in b) {
+            a = a.replace("{" + k + "}", b[k])
+        }
+        return a
+    }
 
 }

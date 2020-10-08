@@ -21,6 +21,7 @@ export class ViewerComponent implements OnInit {
     options = {
         fonts: []
     }
+    config: any = [];
     currentView = '';
     activedoc: any = '';
     doclist: any = [];
@@ -42,9 +43,9 @@ export class ViewerComponent implements OnInit {
         this.drid = this.activatedRoute.snapshot.paramMap.get('drid');
         this.emailid = this.activatedRoute.snapshot.paramMap.get('emailid');
         this.activedoc = this.activatedRoute.snapshot.paramMap.has('drid') ? this.activatedRoute.snapshot.paramMap.get('drid') : 0;
-
+        this.config = this.global.getConfig();
         // this.filePath="https://bucket-cmp" + this.global.getCompany() + ".s3.us-east-2.amazonaws.com/"
-        this.filePath = "https://bucket-cmp" + this.cmpid + ".s3.us-east-2.amazonaws.com/"
+        this.filePath = this.global.format(this.config.AWS_BUCKET_PREFIX, [this.cmpid]); //"https://bucket-cmp" + this.cmpid + ".s3.us-east-2.amazonaws.com/"
         // this.bindDocumentsList();
     }
 
