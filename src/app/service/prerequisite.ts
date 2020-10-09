@@ -11,17 +11,14 @@ export class Prerequisite implements CanActivate, CanLoad, CanActivateChild {
   }
 
   public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    //debugger
     return this.checkFun(route, state);
   }
 
   public canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    //debugger
     return this.checkFun(route, state);
   }
 
   public canLoad() {
-    //debugger
     return true;
   }
 
@@ -33,7 +30,6 @@ export class Prerequisite implements CanActivate, CanLoad, CanActivateChild {
     }
 
     const that = this;
-    //debugger
 
     // const routeconfig = route.data;
     // const checks = that.checkCredentials();
@@ -42,7 +38,7 @@ export class Prerequisite implements CanActivate, CanLoad, CanActivateChild {
     // this.global.setCurrentMenu(route.data.code);
 
     return Observable.create((observer: Subject<boolean>) => {
-   
+
       if (that.global.getCompany(true) == '0') {
         that._router.navigate(['company/list', { backurl: state.url }]);
       }

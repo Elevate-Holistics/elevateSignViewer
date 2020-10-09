@@ -53,7 +53,6 @@ export class IngredientsComponent implements OnInit {
   }
 
   funAddIngredient(ingr) {
-    // debugger;
     ingr.itemid = this.selectedIngItem.id;
     ingr.description = this.selectedIngItem.description;
     if (this.selectedItemUnit) {
@@ -150,7 +149,6 @@ export class IngredientsComponent implements OnInit {
   }
 
   funEditIngredient(ingr, i) {
-    // debugger;
     this.selectedIngItem.id = ingr.itemid;
     this.selectedIngItem.description = ingr.description;
     this.ingredient.itemid = ingr.itemid
@@ -169,7 +167,6 @@ export class IngredientsComponent implements OnInit {
     let query = event.query;
     this.salesrecipesService.searchItemByName({ "itemname": event.query, 'sp_flag': this.sp_flag }).subscribe((data: any[]) => {
       // this.itemlist[index].itemLst = data;
-      // debugger;
       this.filterItem = data;
     });
     // this.countryService.getCountries().then(countries => {

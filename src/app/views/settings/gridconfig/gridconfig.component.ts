@@ -1,5 +1,5 @@
-import { Component, OnInit,ViewChild } from '@angular/core';
-import {SettingsService  } from "../../../service/settings.service";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { SettingsService } from "../../../service/settings.service";
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { GlobalService } from '../../../service/global.service';
@@ -16,13 +16,13 @@ export class GridconfigComponent implements OnInit {
   @ViewChild('moduleTemplate') moduleTemplate;
   modalRef: BsModalRef;
   restvalues: any = {};
-  constructor(private settingservice:SettingsService,private modalService: BsModalService,private global: GlobalService,private advanceSearchService: AdvancesearchService,private message: ToastService, private translate: TranslateService, ) { }
-  moduleList:any=[];
-  moduleName:any='';
-  buttons:any=[];
+  constructor(private settingservice: SettingsService, private modalService: BsModalService, private global: GlobalService, private advanceSearchService: AdvancesearchService, private message: ToastService, private translate: TranslateService,) { }
+  moduleList: any = [];
+  moduleName: any = '';
+  buttons: any = [];
   columnData: any = { columnName: '', active: true };
-  moduleTitle:any='';
-  moduleExist:boolean=false;
+  moduleTitle: any = '';
+  moduleExist: boolean = false;
   rawSignArr: any = '';
   isFromGrid: boolean = true;
   newEntryFlag = false;
@@ -76,7 +76,7 @@ export class GridconfigComponent implements OnInit {
   buttonClicks(type) {
     switch (type) {
       case 'save': this.save();
-      break;
+        break;
       case 'add': this.openModal(this.moduleTemplate);
         break;
       default: ''
@@ -90,304 +90,303 @@ export class GridconfigComponent implements OnInit {
     });
   }
   bindModules() {
-    
- 
-      this.settingservice.getGridconfig({
-        'type': 'allmodules'
-      }).subscribe((res: any) => {
-        if (res.resultKey == 1) {
-          this.moduleList = res.resultValue;
-        }
-      }, (error) => {
 
-      });
-    
-    }
-   
 
-    checkModule(){
-    let flag=  this.moduleList.find((a)=>{
-      let b =a.module.toLowerCase();
-      let c=this.moduleTitle.toLowerCase();
-      return b.replace("'","`") === c.replace("'","`");
-
-      });
-      if(flag != undefined){
-this.moduleExist=true;
+    this.settingservice.getGridconfig({
+      'type': 'allmodules'
+    }).subscribe((res: any) => {
+      if (res.resultKey == 1) {
+        this.moduleList = res.resultValue;
       }
-     else{
-      this.moduleExist=false;
-     }
-    }
+    }, (error) => {
 
-    closeModal() {
-      this.modalRef.hide();
+    });
+
+  }
+
+
+  checkModule() {
+    let flag = this.moduleList.find((a) => {
+      let b = a.module.toLowerCase();
+      let c = this.moduleTitle.toLowerCase();
+      return b.replace("'", "`") === c.replace("'", "`");
+
+    });
+    if (flag != undefined) {
+      this.moduleExist = true;
     }
-    save() {
-      debugger
-      this.setSortToMain();
-      console.log(this.moduleData);
-      const data = JSON.parse(JSON.stringify(this.moduleData));
-  
-      for (let index = 0; index < data.length; index++) {
-        const element = data[index];
-        element.column_order = index + 1;
-        element.isfilter = (element.isfilter) ? 1 : 0; // New code
-        element.issort = (element.issort) ? 1 : 0; // New code
-        element.hidden = (element.hidden) ? 1 : 0; // New code
-        element.fixedselected = (element.fixedselected) ? 1 : 0; // New code
-  
-        element.defaultselected = (element.defaultselected) ? 1 : 0; // New code
-  
-        if (element.extra && element.extra.trim() != '' && this.IsJsonString(element.extra)) {
-          element.extra = JSON.parse(element.extra);
-        } else {
-  
-          element.extra = undefined;
-        }
-        if (element.stylejson && element.stylejson.trim() != '' && this.IsJsonString(element.stylejson)) {
-          element.stylejson = JSON.parse(element.stylejson);
-        } else {
-  
-          element.stylejson = undefined;
-        }
+    else {
+      this.moduleExist = false;
+    }
+  }
+
+  closeModal() {
+    this.modalRef.hide();
+  }
+  save() {
+    this.setSortToMain();
+    console.log(this.moduleData);
+    const data = JSON.parse(JSON.stringify(this.moduleData));
+
+    for (let index = 0; index < data.length; index++) {
+      const element = data[index];
+      element.column_order = index + 1;
+      element.isfilter = (element.isfilter) ? 1 : 0; // New code
+      element.issort = (element.issort) ? 1 : 0; // New code
+      element.hidden = (element.hidden) ? 1 : 0; // New code
+      element.fixedselected = (element.fixedselected) ? 1 : 0; // New code
+
+      element.defaultselected = (element.defaultselected) ? 1 : 0; // New code
+
+      if (element.extra && element.extra.trim() != '' && this.IsJsonString(element.extra)) {
+        element.extra = JSON.parse(element.extra);
+      } else {
+
+        element.extra = undefined;
       }
-      console.log("data",data);
-      try {
-        this.advanceSearchService.addAdvanceSearchData({ 'data': data, 'user_id': this.global.getUser().id }).subscribe((res: any) => {
-          const d = res.resultValue;
-          if (res.resultKey === 1) {
-            if (d.status) {
-              this.sortArray = [];
-              this.message.show('Done', 'Saved Successfully', 'success',this.translate);
-              this.getModuleData();
-            }
-            else {
-              this.message.show('error', d.defaultError, 'error','Error');
-            }
+      if (element.stylejson && element.stylejson.trim() != '' && this.IsJsonString(element.stylejson)) {
+        element.stylejson = JSON.parse(element.stylejson);
+      } else {
+
+        element.stylejson = undefined;
+      }
+    }
+    console.log("data", data);
+    try {
+      this.advanceSearchService.addAdvanceSearchData({ 'data': data, 'user_id': this.global.getUser().id }).subscribe((res: any) => {
+        const d = res.resultValue;
+        if (res.resultKey === 1) {
+          if (d.status) {
+            this.sortArray = [];
+            this.message.show('Done', 'Saved Successfully', 'success', this.translate);
+            this.getModuleData();
           }
           else {
-            this.message.show('error', d.defaultError, 'error','Error');
+            this.message.show('error', d.defaultError, 'error', 'Error');
+          }
+        }
+        else {
+          this.message.show('error', d.defaultError, 'error', 'Error');
+        }
+      }, (error) => {
+        this.message.show('error', error, 'error', 'Error');
+      })
+    } catch (error) {
+      this.message.show('error', error, 'error', 'Error');
+    }
+  }
+
+  setSortToMain() {
+    for (let i = 0; i < this.sortArray.length; i++) {
+      const element = this.sortArray[i];
+
+      const col = this.moduleData.find((a) => {
+        return element.column_name === a.column_name
+      })
+      if (col) {
+        if (this.IsJsonString(col.extra)) {
+          const j = JSON.parse(col.extra);
+          if (j.sort) {
+            j.sort = [i + 1, element.sortType];
+          }
+          col.extra = JSON.stringify(j);
+        }
+      }
+    }
+  }
+  getModuleData() {
+
+    try {
+      if (this.moduleName == '') {
+        this.newEntryFlag = false;
+        this.moduleData = [];
+      }
+      else {
+        this.newEntryFlag = true;
+        this.selectedColumn = this.getResetvalue();
+        this.signArray = this.getRawSignvalue();
+        this.advanceSearchService.show({
+          'type': 'getModuleData',
+          'name': this.moduleName
+        }).subscribe((res: any) => {
+          if (res.resultKey == 1) {
+            this.moduleData = res.resultValue;
+            this.newEntryFlag = true;
+            this.setMainToSort();
           }
         }, (error) => {
-          this.message.show('error', error, 'error','Error');
-        })
-      } catch (error) {
-        this.message.show('error', error, 'error','Error');
+
+        });
       }
+    } catch (error) {
+
+    }
+  }
+  setMainToSort() {
+    this.sortArray = [];
+
+    for (let i = 0; i < this.moduleData.length; i++) {
+      const element = this.moduleData[i];
+      if (this.IsJsonString(element.extra)) {
+        const j = JSON.parse(element.extra);
+        if (element.issort && j.sort) {
+          this.sortArray.push({ label: element.label, column_name: element.column_name, sortType: j.sort[1], order: j.sort[0] });
+        }
+
+      }
+
     }
 
-    setSortToMain() {
-      for (let i = 0; i < this.sortArray.length; i++) {
-        const element = this.sortArray[i];
-  
-        const col = this.moduleData.find((a) => {
-          return element.column_name === a.column_name
-        })
-        if (col) {
-          if (this.IsJsonString(col.extra)) {
-            const j = JSON.parse(col.extra);
-            if (j.sort) {
-              j.sort = [i + 1, element.sortType];
-            }
-            col.extra = JSON.stringify(j);
-          }
-        }
-      }
+    // this.sortArray =  
+    this.sortArray.sort(function (a, b) { return a.order - b.order })
+  }
+
+
+  IsJsonString(str) {
+    try {
+      JSON.parse(str);
+    } catch (e) {
+      return false;
     }
-    getModuleData() {
-      
-      try {
-        if (this.moduleName == '') {
-          this.newEntryFlag = false;
-          this.moduleData = [];
-        }
-        else {
-          this.newEntryFlag = true;
-          this.selectedColumn = this.getResetvalue();
-          this.signArray = this.getRawSignvalue();
-          this.advanceSearchService.show({
-            'type': 'getModuleData',
-            'name': this.moduleName
-          }).subscribe((res: any) => {
-            if (res.resultKey == 1) {
-              this.moduleData = res.resultValue;
-              this.newEntryFlag = true;
-              this.setMainToSort();
-            }
-          }, (error) => {
-  
-          });
-        }
-      } catch (error) {
-  
-      }
-    }
-    setMainToSort() {
-      this.sortArray = [];
-  
-      for (let i = 0; i < this.moduleData.length; i++) {
-        const element = this.moduleData[i];
-        if (this.IsJsonString(element.extra)) {
-          const j = JSON.parse(element.extra);
-          if (element.issort && j.sort) {
-            this.sortArray.push({ label: element.label, column_name: element.column_name, sortType: j.sort[1], order: j.sort[0] });
-          }
-  
-        }
-  
-      }
-  
-      // this.sortArray =  
-      this.sortArray.sort(function (a, b) { return a.order - b.order })
-    }
-  
-   
-    IsJsonString(str) {
-      try {
-        JSON.parse(str);
-      } catch (e) {
-        return false;
-      }
-      return true;
-    }
-    addNewColumn() {
-      try {
-        const found = this.moduleData.find((a) => {
-          return a.label === this.columnData.columnName;
-        });
-        if (!found) {
-          this.selectedColumn = this.getResetvalue();
-          this.selectedColumn.id = 0;
-          this.selectedColumn.label = this.columnData.columnName;
-          this.selectedColumn.active = this.columnData.active;
-          this.selectedColumn.module = this.moduleName;
-          this.moduleData.push(this.selectedColumn);
-          this.message.show('success', 'Column added successfully', 'success', this.translate);
-          this.closeModal();
-        }
-        else {
-          throw ('Column Name is already exist');
-        }
-      } catch (error) {
-    this.message.show('error', error, 'error', this.translate);
-      }
-    }
-  
-    getResetvalue() {
-      
-      return JSON.parse(this.restvalues);
-    }
-    getRawSignvalue() {
-  
-      return JSON.parse(this.rawSignArr);
-    }
-  
-    buildExtra() {
-      const extra = {};
-      let allarr = [];
-      for (let index = 0; index < this.signArray.length; index++) {
-        const element = this.signArray[index];
-        if (element.checked) {
-          allarr.push(element.sign);
-        }
-      }
-      extra[this.extraData.allowType] = allarr;
-      if (this.extraData.datasource) {
-        extra['datasource'] = this.extraData.datasource;
-      }
-      if (this.extraData.search) {
-        extra['search'] = this.extraData.search;
-      }
-  
-      if (this.extraData.sort && this.selectedColumn.issort) {
-        extra['sort'] = this.extraData.sort;
-  
-      }
-      else {
-        extra['sort'] = undefined;
-      }
-  
-      if (this.extraData.case) {
-  
-        extra['case'] = this.extraData.case;
-  
-      }
-      return JSON.stringify(extra);
-    }
-  
-    oncheckchange(e) {
-      this.selectedColumn.extra = this.buildExtra();
-    }
-  
-    onchange(e) {
-      this.selectedColumn.extra = this.buildExtra();
-    }
-    oncaseChange(e) {
-      this.selectedColumn.extra = this.buildExtra();
-    }
-  
-    addNewModule() {
-      try {
-        this.moduleList.push({ 'module': this.moduleTitle });
-        this.moduleName = this.moduleTitle;
-      this.message.show('success', 'Module added successfully', 'success', this.translate);
+    return true;
+  }
+  addNewColumn() {
+    try {
+      const found = this.moduleData.find((a) => {
+        return a.label === this.columnData.columnName;
+      });
+      if (!found) {
+        this.selectedColumn = this.getResetvalue();
+        this.selectedColumn.id = 0;
+        this.selectedColumn.label = this.columnData.columnName;
+        this.selectedColumn.active = this.columnData.active;
+        this.selectedColumn.module = this.moduleName;
+        this.moduleData.push(this.selectedColumn);
+        this.message.show('success', 'Column added successfully', 'success', this.translate);
         this.closeModal();
-        this.newEntryFlag = true;
-      } catch (error) {
-  
-      }
-    }
-  
-    onSortChange(event) {
-      this.selectedColumn.extra = this.buildExtra();
-      this.addToSort();
-    }
-    onSortOrderChange(event) {
-      this.selectedColumn.extra = this.buildExtra();
-      this.addToSort();
-    }
-  
-    addToSort() {
-      const selectedCol = this.sortArray.find((b) => {
-        return b.column_name == this.selectedColumn.column_name;
-      });
-      
-      if (this.extraData.sort && this.selectedColumn.issort) {
-        if (selectedCol) {
-          selectedCol.sortType = this.extraData.sort[1];
-        }
-        else {
-          this.sortArray.push({ label: this.selectedColumn.label, column_name: this.selectedColumn.column_name, sortType: this.extraData.sort[1] });
-        }
-  
       }
       else {
-        const sArray = this.sortArray.filter((a) => {
-          return a.column_name != this.selectedColumn.column_name;
-        });
-        this.sortArray = sArray;
+        throw ('Column Name is already exist');
+      }
+    } catch (error) {
+      this.message.show('error', error, 'error', this.translate);
+    }
+  }
+
+  getResetvalue() {
+
+    return JSON.parse(this.restvalues);
+  }
+  getRawSignvalue() {
+
+    return JSON.parse(this.rawSignArr);
+  }
+
+  buildExtra() {
+    const extra = {};
+    let allarr = [];
+    for (let index = 0; index < this.signArray.length; index++) {
+      const element = this.signArray[index];
+      if (element.checked) {
+        allarr.push(element.sign);
       }
     }
-  
-    onSortTypeChange(item) {
-      const selectedItem = this.moduleData.find((b) => {
-        return b.column_name == item.column_name;
+    extra[this.extraData.allowType] = allarr;
+    if (this.extraData.datasource) {
+      extra['datasource'] = this.extraData.datasource;
+    }
+    if (this.extraData.search) {
+      extra['search'] = this.extraData.search;
+    }
+
+    if (this.extraData.sort && this.selectedColumn.issort) {
+      extra['sort'] = this.extraData.sort;
+
+    }
+    else {
+      extra['sort'] = undefined;
+    }
+
+    if (this.extraData.case) {
+
+      extra['case'] = this.extraData.case;
+
+    }
+    return JSON.stringify(extra);
+  }
+
+  oncheckchange(e) {
+    this.selectedColumn.extra = this.buildExtra();
+  }
+
+  onchange(e) {
+    this.selectedColumn.extra = this.buildExtra();
+  }
+  oncaseChange(e) {
+    this.selectedColumn.extra = this.buildExtra();
+  }
+
+  addNewModule() {
+    try {
+      this.moduleList.push({ 'module': this.moduleTitle });
+      this.moduleName = this.moduleTitle;
+      this.message.show('success', 'Module added successfully', 'success', this.translate);
+      this.closeModal();
+      this.newEntryFlag = true;
+    } catch (error) {
+
+    }
+  }
+
+  onSortChange(event) {
+    this.selectedColumn.extra = this.buildExtra();
+    this.addToSort();
+  }
+  onSortOrderChange(event) {
+    this.selectedColumn.extra = this.buildExtra();
+    this.addToSort();
+  }
+
+  addToSort() {
+    const selectedCol = this.sortArray.find((b) => {
+      return b.column_name == this.selectedColumn.column_name;
+    });
+
+    if (this.extraData.sort && this.selectedColumn.issort) {
+      if (selectedCol) {
+        selectedCol.sortType = this.extraData.sort[1];
+      }
+      else {
+        this.sortArray.push({ label: this.selectedColumn.label, column_name: this.selectedColumn.column_name, sortType: this.extraData.sort[1] });
+      }
+
+    }
+    else {
+      const sArray = this.sortArray.filter((a) => {
+        return a.column_name != this.selectedColumn.column_name;
       });
-      if (selectedItem) {
-        if (this.IsJsonString(selectedItem.extra)) {
-          const j = JSON.parse(selectedItem.extra);
-          if (j.sort) {
-            j.sort[1] = item.sortType;
-          }
-          selectedItem.extra = JSON.stringify(j);
-          if (this.selectedColumn && this.selectedColumn.column_name == selectedItem.column_name) {
-            this.extraData.sort = j.sort;
-          }
+      this.sortArray = sArray;
+    }
+  }
+
+  onSortTypeChange(item) {
+    const selectedItem = this.moduleData.find((b) => {
+      return b.column_name == item.column_name;
+    });
+    if (selectedItem) {
+      if (this.IsJsonString(selectedItem.extra)) {
+        const j = JSON.parse(selectedItem.extra);
+        if (j.sort) {
+          j.sort[1] = item.sortType;
+        }
+        selectedItem.extra = JSON.stringify(j);
+        if (this.selectedColumn && this.selectedColumn.column_name == selectedItem.column_name) {
+          this.extraData.sort = j.sort;
         }
       }
     }
-    
+  }
+
   drop(event: CdkDragDrop<string[]>) {
     if (event.previousContainer !== event.container) {
       transferArrayItem(event.previousContainer.data, event.container.data,
@@ -397,7 +396,7 @@ this.moduleExist=true;
     }
   }
 
-  
+
   sortDrop(event: CdkDragDrop<string[]>) {
 
     if (event.previousContainer !== event.container) {
@@ -486,10 +485,10 @@ this.moduleExist=true;
     });
     if (a) {
       item.column_name = '';
-     this.message.show('error', 'Column Field is already exist', 'error', this.translate);
+      this.message.show('error', 'Column Field is already exist', 'error', this.translate);
     }
   }
-  
+
   onSortColumnClick(item) {
     const col = this.moduleData.find((a) => {
       return a.column_name === item.column_name;

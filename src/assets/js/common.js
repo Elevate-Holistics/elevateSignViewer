@@ -1,13 +1,13 @@
 util = {};
 util.focus = function (elementid) {
-    document.getElementById(elementid).focus();
+  document.getElementById(elementid).focus();
 }
 
 
 const common = {};
 common.menusForSearch = [];
 common.menubind = function (list) {
-   
+
   common.menusForSearch = [];
   var map = {},
     node, roots = [],
@@ -41,7 +41,6 @@ common.menubind = function (list) {
   }
   let rootmenu = [];
   for (var k in roots) {
-    // debugger
     const mainmenu = roots[k]
     if (mainmenu.isclickable != 0) {
       rootmenu.push(mainmenu);

@@ -21,6 +21,7 @@ export class ViewerComponent implements OnInit {
     options = {
         fonts: []
     }
+    config: any = [];
     currentView = '';
     activedoc: any = '';
     doclist: any = [];
@@ -37,16 +38,14 @@ export class ViewerComponent implements OnInit {
         private router: Router, private global: GlobalService, private location: Location, private confirmmsg: ConfirmationService, private message: ToastService, private translate: TranslateService) { }
 
     ngOnInit() {
-        debugger
-
         this.dmid = this.activatedRoute.snapshot.paramMap.get('dmid');
         this.cmpid = this.activatedRoute.snapshot.paramMap.get('cmpid');
         this.drid = this.activatedRoute.snapshot.paramMap.get('drid');
         this.emailid = this.activatedRoute.snapshot.paramMap.get('emailid');
         this.activedoc = this.activatedRoute.snapshot.paramMap.has('drid') ? this.activatedRoute.snapshot.paramMap.get('drid') : 0;
-
+        this.config = this.global.getConfig();
         // this.filePath="https://bucket-cmp" + this.global.getCompany() + ".s3.us-east-2.amazonaws.com/"
-        this.filePath = "https://bucket-cmp" + this.cmpid + ".s3.us-east-2.amazonaws.com/"
+        this.filePath = this.global.format(this.config.AWS_BUCKET_PREFIX, [this.cmpid]); //"https://bucket-cmp" + this.cmpid + ".s3.us-east-2.amazonaws.com/"
         // this.bindDocumentsList();
     }
 
@@ -98,7 +97,6 @@ export class ViewerComponent implements OnInit {
     
 
         let valueData = this.viewer.getValues(this.currentView);
-        debugger
         let data = {
             'dmid': this.dmid,
             'drid': this.drid,
@@ -115,7 +113,6 @@ export class ViewerComponent implements OnInit {
 
         }).subscribe((data: any) => {
             if (data.resultKey == 1) {
-
                 this.message.show('Success', 'Saved', 'success', this.translate);
                 this.router.navigate(['sign/complete/f']);
             }
@@ -141,7 +138,17 @@ export class ViewerComponent implements OnInit {
         console.log('docdata', docdata);
         console.log('valuedata', valuedata);
         this.currentView = item.key;
-        this.viewer.setData(item.src, docdata, item.key);
+
+        item.cval = JSON.parse(item.cval);
+
+        let othersInput = {};
+        if (item.cval != null) {
+            item.cval.forEach(element => {
+                othersInput = { ...element, ...othersInput }
+            });
+        }
+
+        this.viewer.setData(item.src, docdata, item.key, {}, othersInput);
         // this.router.navigate(['/sign/2/' + this.dmid + '/' + item.drid]);
 
         //  this.viewer.setVisibility();
@@ -254,7 +261,6 @@ export class ViewerComponent implements OnInit {
             'userid': this.global.getUser().id
         }).subscribe((data: any) => {
             if (data.resultKey == 1) {
-                debugger
                 this.viewer.signUploaded(true,
                     { name: event.name, url: this.filePath + data.resultValue.path },
                     event.props);

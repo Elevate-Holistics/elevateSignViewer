@@ -17,12 +17,12 @@ import { NgForm } from '@angular/forms';
 })
 export class AddComponent implements OnInit {
   upload_url: any = '';
-
+  config: any = [];
   templateObj: ClsTemplate;
 
   uploadMaxFilesize: any = 5000000;
   imageUrl: string = "";
-  bucketPath: string = "https://bucket-cmp" + this.global.getCompany() + ".s3.us-east-2.amazonaws.com/";
+  bucketPath: string;
 
   canSubmit: boolean;
   @ViewChild("f") ngform: NgForm;
@@ -42,6 +42,9 @@ export class AddComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.config = this.global.getConfig();
+    this.bucketPath = this.global.format(this.config.AWS_BUCKET_PREFIX, [this.global.getCompany()]); //"https://bucket-cmp" + this.global.getCompany() + ".s3.us-east-2.amazonaws.com/";
+
     this.templateObj = new ClsTemplate();
     this.upload_url = this.global.getConfig().api_root + '/company(' + this.global.getCompany() + ')/uploadpdf';
     // this.getAllTemplate();
@@ -74,7 +77,7 @@ export class AddComponent implements OnInit {
     event.formData.append('usercreated', this.global.getUser().id);
 
     event.formData.append('cmp', this.global.getCompany());
-   // event.xhr.setRequestHeader('Authorization', 'Bearer ' + this.global.getUser().token);
+    // event.xhr.setRequestHeader('Authorization', 'Bearer ' + this.global.getUser().token);
   }
   onFileUpload(event, fileUpload) {
     let res: any = {};

@@ -10,21 +10,21 @@ import { TemplateService } from '../../../../service/template.service';
 })
 export class ViewComponent implements OnInit {
   documentsDeatilList: any = [];
-  tempdocumentsDeatilList:any=[];
+  tempdocumentsDeatilList: any = [];
   sortOptions: SelectItem[];
   searchstring: any = '';
   sortKey: string;
-
+  config: any = [];
   sortField: string;
 
   sortOrder: number;
   filePath: any = '';
-  noTemplatefound: boolean=false;
-  constructor(private template: TemplateService, private global: GlobalService,private router: Router,) { }
-  buttons:any=[];
+  noTemplatefound: boolean = false;
+  constructor(private template: TemplateService, private global: GlobalService, private router: Router,) { }
+  buttons: any = [];
   ngOnInit(): void {
-
-    this.filePath = "https://bucket-cmp" + this.global.getCompany() + ".s3.us-east-2.amazonaws.com/";
+    this.config = this.global.getConfig();
+    this.filePath = this.global.format(this.config.AWS_BUCKET_PREFIX, [this.global.getCompany()]); //"https://bucket-cmp" + this.global.getCompany() + ".s3.us-east-2.amazonaws.com/";
     this.sortOptions = [
       { label: 'Newest First', value: '!year' },
       { label: 'Oldest First', value: 'year' },
@@ -57,11 +57,11 @@ export class ViewComponent implements OnInit {
     //   { id: 6, name: "Document 1", src: "/assets/img/img1.png" }];
   }
 
-  buttonClicks(event){
-    
+  buttonClicks(event) {
+
   }
   bindTemplateGrid() {
-    
+
     this.template.getAllTemplate({
       operate: 'get'
     }).subscribe((data: any) => {
@@ -75,7 +75,7 @@ export class ViewComponent implements OnInit {
   }
 
   makedocumentsDeatilList(data) {
-    
+
     if (data.length <= 0) {
       return;
     }
@@ -83,11 +83,11 @@ export class ViewComponent implements OnInit {
     data.forEach(element => {
 
 
-      
-      element.src =  (element.src == '' || element.src != null || element.src != undefined) ? (this.filePath + 'template/thumbnail/' + element.src.split('/')[1].replace('.pdf', '.jpeg')) : null;
+
+      element.src = (element.src == '' || element.src != null || element.src != undefined) ? (this.filePath + 'template/thumbnail/' + element.src.split('/')[1].replace('.pdf', '.jpeg')) : null;
 
 
-     // element.src = this.filePath + element.src;
+      // element.src = this.filePath + element.src;
       this.documentsDeatilList.push(element);
       this.tempdocumentsDeatilList.push(element);
     });
@@ -95,46 +95,45 @@ export class ViewComponent implements OnInit {
     console.log(this.documentsDeatilList);
   }
 
-//   searchTemplate() {
-//     
-//     let tempList = this.documentsDeatilList ;
-//     this.documentsDeatilList =[];
-//     this.documentsDeatilList = tempList.find((a) => {
-//       if(a.name.includes(this.searchstring)){
-// return a;
-//       }
-   
-//     })
-//   }
+  //   searchTemplate() {
+  //     
+  //     let tempList = this.documentsDeatilList ;
+  //     this.documentsDeatilList =[];
+  //     this.documentsDeatilList = tempList.find((a) => {
+  //       if(a.name.includes(this.searchstring)){
+  // return a;
+  //       }
 
-countArray:any=[];
-searchTemplate(){
-  debugger
-  if (this.searchstring != '' || this.searchstring != undefined || this.searchstring != null) { }
-  let temptemplate = this.documentsDeatilList;
- 
-   this.noTemplatefound= false;
- // this.templateList = [];
- for (let index = 0; index < this.documentsDeatilList.length; index++) {
-   const element = this.documentsDeatilList[index];
-   let name = element.name.toLowerCase();
-    
-   // name.includes(this.searchtemplatestring.toLowerCase());
-   if(!name.includes(this.searchstring.toLowerCase())){
-     element.show=false;
-     this.countArray.push(1);
-    
-   }
-   else {
-    element.show=true;
+  //     })
+  //   }
 
-    
-   }
- }
- if(this.countArray.length > 1){
-  this.noTemplatefound = true;
-}
-}
+  countArray: any = [];
+  searchTemplate() {
+    if (this.searchstring != '' || this.searchstring != undefined || this.searchstring != null) { }
+    let temptemplate = this.documentsDeatilList;
+
+    this.noTemplatefound = false;
+    // this.templateList = [];
+    for (let index = 0; index < this.documentsDeatilList.length; index++) {
+      const element = this.documentsDeatilList[index];
+      let name = element.name.toLowerCase();
+
+      // name.includes(this.searchtemplatestring.toLowerCase());
+      if (!name.includes(this.searchstring.toLowerCase())) {
+        element.show = false;
+        this.countArray.push(1);
+
+      }
+      else {
+        element.show = true;
+
+
+      }
+    }
+    if (this.countArray.length > 1) {
+      this.noTemplatefound = true;
+    }
+  }
   // searchTemplate() {
 
   //   if (this.searchstring == '') {
@@ -162,8 +161,8 @@ searchTemplate(){
   }
 
 
-  editTemplate(item){
-    this.router.navigate(['/documents/templates/'+item.id +'/edit']);
+  editTemplate(item) {
+    this.router.navigate(['/documents/templates/' + item.id + '/edit']);
 
     // http://localhost:4200/#/documents/templates/7305267e-edae-11ea-8aa5-029cd58f3b70/recipient
   }
