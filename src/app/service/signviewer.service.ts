@@ -22,4 +22,7 @@ export class SignviewerService {
   processData(req: any) {
     return this.dataservice.postHttpData('/document/process', req);
   }
+  validate(req: any) {
+    return this.dataservice.postHttpData('/document/validate', req);
+  }
 }
