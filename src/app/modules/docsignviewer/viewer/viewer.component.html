@@ -6,7 +6,7 @@
 <div class="fixed-content p-0 " style="overflow-x: hidden;">
   <i-docsignviewer #viewer [toolbarBg]="'#e7edee'" [toolbarColor]="'#333333'" [showSidebar]="true"
     [showZoomControl]="true" [reduceHeight]="153" [zoom]="0.8"  [activedoc]="activedoc"
-    (onDoclistselect)="onDocListSelect($event)" (onFinished)="onFinished($event)" (onCancel)="onCancel($event)"
+    (onDoclistselect)="onDocListSelect($event)" (onFinished)="validate($event)" (onCancel)="onCancel($event)"
     (onSignatureCreate)="onSignatureCreate($event)"></i-docsignviewer>
 </div>
 
