@@ -80,9 +80,10 @@ export class ViewerComponent implements OnInit {
             'key': this.global.getUser().key
 
         }).subscribe((data: any) => {
+            debugger
             if (data.resultKey == 1) {
                 if (data.resultValue[0].finished == true) {
-                    this.router.navigate(['sign/complete/f']);
+                    this.router.navigate(['sign/complete/a']);
                 } else if (data.resultValue[0].finished == false) {
                     this.onFinished(e);
                 }
@@ -195,7 +196,8 @@ export class ViewerComponent implements OnInit {
             "templateid": templateid,
             "key": this.global.getUser().key,
             "drid": this.drid,
-            "recpid": this.global.getUser().id
+            "recpid": this.global.getUser().id,
+            "email":this.global.getUser().email
         }).subscribe((data) => {
             if (data.resultKey == 1) {
                 this.makeData(data.resultValue);
