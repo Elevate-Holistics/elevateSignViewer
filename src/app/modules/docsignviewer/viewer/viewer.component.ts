@@ -9,6 +9,8 @@ import { Location } from '@angular/common';
 import { ConfirmationService } from 'primeng/api';
 import { ToastService } from '../../../service/toast-service';
 import { TranslateService } from '@ngx-translate/core';
+import { environment } from '../../../../environments/environment'
+import { UserModel } from '../../../intefaces/userModel';
 
 @Component({
     selector: 'app-viewer',
@@ -21,9 +23,11 @@ export class ViewerComponent implements OnInit {
     options = {
         fonts: []
     }
+    env = {}
     config: any = [];
     currentView = '';
     activedoc: any = '';
+    otp: string = '';
     doclist: any = [];
     defaultDocdata = '';
     // [{name: 'Document Subject D Subject Herer ajjl',id: 1,status_icon: 'fa-warning',status_color: 'rgb(224, 120, 0)',extra: {}}, {name: 'DCS Subject D Subject Herer ajjl',status_icon: 'fa-check',status_color: 'rgb(0, 184, 92)',id: 2,extra: {}}]
@@ -35,14 +39,22 @@ export class ViewerComponent implements OnInit {
     emailid: any = '';
     recpid: any = '';
     constructor(private signviewer: SignviewerService, private activatedRoute: ActivatedRoute,
-        private router: Router, private global: GlobalService, private location: Location, private confirmmsg: ConfirmationService, private message: ToastService, private translate: TranslateService) { }
+        private router: Router, private global: GlobalService, private location: Location,
+        private confirmmsg: ConfirmationService, private message: ToastService, private translate: TranslateService) { this.env = environment; }
 
     ngOnInit() {
+        debugger;
         this.dmid = this.activatedRoute.snapshot.paramMap.get('dmid');
         this.cmpid = this.activatedRoute.snapshot.paramMap.get('cmpid');
         this.drid = this.activatedRoute.snapshot.paramMap.get('drid');
         this.emailid = this.activatedRoute.snapshot.paramMap.get('emailid');
         this.activedoc = this.activatedRoute.snapshot.paramMap.has('drid') ? this.activatedRoute.snapshot.paramMap.get('drid') : 0;
+
+        if (this.activatedRoute.snapshot.paramMap.has('otp')) {
+            this.env["isAuthenticated"] = true;
+            this.otp = this.activatedRoute.snapshot.paramMap.get('otp')
+        }
+
         this.config = this.global.getConfig();
         // this.filePath="https://bucket-cmp" + this.global.getCompany() + ".s3.us-east-2.amazonaws.com/"
         this.filePath = this.global.format(this.config.AWS_BUCKET_PREFIX, [this.cmpid]); //"https://bucket-cmp" + this.cmpid + ".s3.us-east-2.amazonaws.com/"
@@ -71,7 +83,7 @@ export class ViewerComponent implements OnInit {
         let v = this.viewer.validate(this.currentView)
         if (v.length > 0) {
             return;
-                    }
+        }
         this.signviewer.validate({
             'operate': 'validateisfinish',
             'drid': this.drid,
@@ -95,7 +107,7 @@ export class ViewerComponent implements OnInit {
 
 
         let v = this.viewer.validate(this.currentView)
-    
+
 
         let valueData = this.viewer.getValues(this.currentView);
         let data = {
@@ -181,23 +193,21 @@ export class ViewerComponent implements OnInit {
                 }
 
             }
-
-
-
         })
 
 
     }
     bindDocumentDetails(templateid) {
         this.signviewer.getDocumnet({
-            "operate": 'docdetail',
+            "operate": this.otp == '' ? 'docdetail' : 'docdetailotp',
             "dmid": this.dmid,
             "cmpid": "cmp" + this.cmpid,
             "templateid": templateid,
             "key": this.global.getUser().key,
             "drid": this.drid,
             "recpid": this.global.getUser().id,
-            "email":this.global.getUser().email
+            "email": this.global.getUser().email,
+            "otp": this.otp
         }).subscribe((data) => {
             if (data.resultKey == 1) {
                 this.makeData(data.resultValue);
@@ -207,6 +217,17 @@ export class ViewerComponent implements OnInit {
     makeData(data) {
         if (data.length > 0) {
             let docdetail = data[0];
+
+            if (this.otp != "") {
+                const user: UserModel = {
+                    email: docdetail.email,
+                    key: docdetail.key,
+                    id: docdetail.id
+                };
+                this.global.setIslogin(true);
+                this.global.setUser(user);
+            }
+
             this.recpid = docdetail.recpid;
             let tempUrl = JSON.parse(docdetail.url);
             let url = this.filePath + tempUrl.doc;
