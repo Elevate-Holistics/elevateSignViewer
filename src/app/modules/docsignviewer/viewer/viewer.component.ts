@@ -43,7 +43,6 @@ export class ViewerComponent implements OnInit {
         private confirmmsg: ConfirmationService, private message: ToastService, private translate: TranslateService) { this.env = environment; }
 
     ngOnInit() {
-        debugger;
         this.dmid = this.activatedRoute.snapshot.paramMap.get('dmid');
         this.cmpid = this.activatedRoute.snapshot.paramMap.get('cmpid');
         this.drid = this.activatedRoute.snapshot.paramMap.get('drid');
@@ -92,7 +91,6 @@ export class ViewerComponent implements OnInit {
             'key': this.global.getUser().key
 
         }).subscribe((data: any) => {
-            debugger
             if (data.resultKey == 1) {
                 if (data.resultValue[0].finished == true) {
                     this.router.navigate(['sign/complete/a']);
@@ -218,40 +216,42 @@ export class ViewerComponent implements OnInit {
         if (data.length > 0) {
             let docdetail = data[0];
 
-            if (this.otp != "") {
-                const user: UserModel = {
-                    email: docdetail.email,
-                    key: docdetail.key,
-                    id: docdetail.id
-                };
-                this.global.setIslogin(true);
-                this.global.setUser(user);
+            if (docdetail.status == "completed") {
+                this.router.navigate(['/sign/complete/a']);
+            } else {
+                if (this.otp != "") {
+                    const user: UserModel = {
+                        email: docdetail.email,
+                        key: docdetail.key,
+                        id: docdetail.id
+                    };
+                    this.global.setIslogin(true);
+                    this.global.setUser(user);
+                }
+
+                this.recpid = docdetail.recpid;
+                let tempUrl = JSON.parse(docdetail.url);
+                let url = this.filePath + tempUrl.doc;
+                docdetail.src = url;
+                // let result = this.doclist.find((a) => {
+                //     if (a.id == docdetail.id) {
+
+                //         a.src = this.filePath + url;
+                //         return a;
+                //     }
+                // })
+
+
+                // if (result != undefined) {
+                this.setDatatoViewer(docdetail);
+                // }
+
+
+                // console.log(this.doclist);
             }
 
-            this.recpid = docdetail.recpid;
-            let tempUrl = JSON.parse(docdetail.url);
-            let url = this.filePath + tempUrl.doc;
-            docdetail.src = url;
-            // let result = this.doclist.find((a) => {
-            //     if (a.id == docdetail.id) {
-
-            //         a.src = this.filePath + url;
-            //         return a;
-            //     }
-            // })
-
-
-            // if (result != undefined) {
-            this.setDatatoViewer(docdetail);
-            // }
-
-
-            // console.log(this.doclist);
-
-
-        } else if (data.length <= 0) {
-
-            this.router.navigate(['/sign/complete/a']);
+        } else if (data.length == 0) {
+            this.router.navigate(['/sign/error']);
         }
     }
 

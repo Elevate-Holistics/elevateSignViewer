@@ -47,7 +47,7 @@ const routes: Routes = [
       {
         path: 'error',
         component: ErrorpageComponent,
-        canActivate: [AuthGuard],
+        canActivate: [],
         data: {
           title: 'Error',
           code: 'error'
@@ -57,7 +57,7 @@ const routes: Routes = [
       {
         path: 'complete/:type',
         component: CompletedComponent,
-        canActivate: [AuthGuard],
+        canActivate: [],
         data: {
           title: 'Complete',
           code: 'complete'
