@@ -141,7 +141,6 @@ export class ViewerComponent implements OnInit {
     }
     setDatatoViewer(item) {
 
-
         this.activedoc = item.id;
         let docdata = (item.docdata != '{}' || item.docdata != null || item.docdata != undefined) ? JSON.parse(item.docdata) : item.docdata;
         let valuedata = (item.valuedata != '{}' || item.valuedata != null || item.valuedata != undefined) ? JSON.parse(item.valuedata) : item.valuedata;
@@ -159,9 +158,15 @@ export class ViewerComponent implements OnInit {
             });
         }
 
-        this.viewer.setData(item.src, docdata, item.key, {}, othersInput);
-        // this.router.navigate(['/sign/2/' + this.dmid + '/' + item.drid]);
+        if (item.sign) {
+            this.viewer.addSignatureList(item.sign.filter(a => a.type == "signature").map(b => ({ "name": b.name, "url": b.s3path, "type": 'sign' })))
+            this.viewer.addInitialList(item.sign.filter(a => a.type == "initial").map(b => ({ "name": b.name, "url": b.s3path, "type": b.type })))
+        }
+        this.viewer.setSignatureName(item.uname, item.uname);
 
+        this.viewer.setData(item.src, docdata, item.key, {}, othersInput);
+
+        // this.router.navigate(['/sign/2/' + this.dmid + '/' + item.drid]);
         //  this.viewer.setVisibility();
 
     }
@@ -233,6 +238,7 @@ export class ViewerComponent implements OnInit {
                 let tempUrl = JSON.parse(docdetail.url);
                 let url = this.filePath + tempUrl.doc;
                 docdetail.src = url;
+                docdetail.sign = JSON.parse(docdetail.sign);
                 // let result = this.doclist.find((a) => {
                 //     if (a.id == docdetail.id) {
 
@@ -268,7 +274,7 @@ export class ViewerComponent implements OnInit {
         //         this.uploadSignature(event, false);
         //     }
         // });
-        this.uploadSignature(event, false);
+        this.uploadSignature(event, true);
     }
 
     uploadSignature(event, saveInDB) {
@@ -278,7 +284,7 @@ export class ViewerComponent implements OnInit {
             'emailid': this.global.getUser().email,
             'title': "",
             'desc': "",
-            'type': 'signature',
+            'type': event.props.type == 'sign' ? 'signature' : 'initial',
             'dbsave': saveInDB,
             'cmpid': this.cmpid,
             'userid': this.global.getUser().id
