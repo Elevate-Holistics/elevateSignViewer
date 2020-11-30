@@ -95,11 +95,26 @@
                 }
               ]
             },
-            "uatlocal": {
+            "abst": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.uat.ts"
+                  "with": "src/environments/environment.abst.ts"
                 }
               ]
             },
@@ -108,6 +123,22 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.prod.ts"
+                }
+              ]
+            },
+            "uatlocal": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.uat.ts"
+                }
+              ]
+            },
+            "abstlocal": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.abst.ts"
                 }
               ]
             }
@@ -124,6 +155,9 @@
             },
             "uat": {
               "browserTarget": "ng:build:uatlocal"
+            },
+            "abst": {
+              "browserTarget": "ng:build:abstlocal"
             }
           }
         },

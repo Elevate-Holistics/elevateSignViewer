@@ -35,7 +35,9 @@
     "aws-deploy-uat": "npm install && npm run awsbuilduat && aws s3 rm s3://elevatesign --recursive --profile elevateuat && aws s3 sync dist/ s3://elevatesign --profile elevateuat",
     "awsbuildprod": "ng build --prod --aot --named-chunks --build-optimizer --vendor-chunk --output-hashing all --extract-css true --base-href /",
     "aws-deploy-live": "npm install && npm run awsbuildprod && aws s3 rm s3://elevate-esign-sign --recursive --profile elevatelive && aws s3 sync dist/ s3://elevate-esign-sign --profile elevatelive",
-    "aws-deploy-both": "npm run aws-deploy-uat && npm run aws-deploy-live"
+    "aws-deploy-both": "npm run aws-deploy-uat && npm run aws-deploy-live",
+    "awsbuildabst": "ng build -c abst --aot --named-chunks --build-optimizer --vendor-chunk --output-hashing all --extract-css true --base-href /",
+    "aws-deploy-abst": "npm install && npm run awsbuildabst && aws s3 rm s3://abst-esign-sign --recursive --profile abstuat && aws s3 sync dist/ s3://abst-esign-sign --profile abstuat"
   },
   "private": true,
   "dependencies": {
@@ -63,7 +65,7 @@
     "chart.js": "^2.9.2",
     "core-js": "^3.6.4",
     "datatables.net-dt": "1.10.20",
-    "esigndoccontrol": "https://github.com/pratikidea/doceditor/files/5535564/esigndoccontrol-0.0.33.zip",
+    "esigndoccontrol": "https://github.com/pratikidea/doceditor/files/5573298/esigndoccontrol-0.0.34.zip",
     "flag-icon-css": "^3.4.6",
     "font-awesome": "^4.7.0",
     "jquery": "^3.5.0",
