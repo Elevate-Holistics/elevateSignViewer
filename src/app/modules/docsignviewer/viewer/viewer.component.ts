@@ -280,7 +280,7 @@ export class ViewerComponent implements OnInit {
     uploadSignature(event, saveInDB) {
         this.signviewer.saveSignature({
             'img': event.base64,
-            'name': event.name,
+            'name': event.props.dataset.name,
             'emailid': this.global.getUser().email,
             'title': "",
             'desc': "",
@@ -291,7 +291,7 @@ export class ViewerComponent implements OnInit {
         }).subscribe((data: any) => {
             if (data.resultKey == 1) {
                 this.viewer.signUploaded(true,
-                    { name: event.name, url: this.filePath + data.resultValue.path },
+                    { name: event.props.dataset.name, url: this.filePath + data.resultValue.path },
                     event.props);
             } else {
                 console.log("Error while uploading signature");
