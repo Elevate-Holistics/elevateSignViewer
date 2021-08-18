@@ -82,8 +82,6 @@ export class ViewerComponent implements OnInit {
         let v = this.viewer.validate(this.currentView)
         if (v.length > 0) {
             return;
-        }else if(e == "validateonly"){
-            return;
         }
         this.signviewer.validate({
             'operate': 'validateisfinish',
@@ -105,7 +103,7 @@ export class ViewerComponent implements OnInit {
     onFinished(e) {
         // let flag = this.validate();
 
-        
+
         let v = this.viewer.validate(this.currentView)
 
 
@@ -277,10 +275,6 @@ export class ViewerComponent implements OnInit {
         //     }
         // });
         this.uploadSignature(event, true);
-    }
-
-    onSignatureApplyAll(event) {
-        this.validate("validateonly")
     }
 
     uploadSignature(event, saveInDB) {
