@@ -1385,4 +1385,23 @@ body .ui-dataview .ui-dataview-content {
       padding-bottom: 1rem !important;
     }
   }
+
+  #signaturepad {
+    width: 99% !important;
+    min-width: unset !important;
+    min-height: unset !important;
+    max-height: unset !important;
+
+  }
+
+  .pane > div {
+    flex-direction: column !important;
+    div {
+      height: auto !important;
+    }
+  }
+
+  .ui-dialog {
+    width: 100% !important;
+  }
 }
