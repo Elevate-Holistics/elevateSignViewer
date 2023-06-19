@@ -42,6 +42,21 @@ export class ViewerComponent implements OnInit {
         private router: Router, private global: GlobalService, private location: Location,
         private confirmmsg: ConfirmationService, private message: ToastService, private translate: TranslateService) { this.env = environment; }
 
+    getBrowserName(): string {
+        const agent = window.navigator.userAgent.toLowerCase();
+        const browser =
+            agent.indexOf('edge') > -1 ? 'Microsoft Edge'
+            : agent.indexOf('edg') > -1 ? 'Chromium-based Edge'
+            : agent.indexOf('opr') > -1 ? 'Opera'
+            : agent.indexOf('chrome') > -1 ? 'Chrome'
+            : agent.indexOf('trident') > -1 ? 'Internet Explorer'
+            : agent.indexOf('firefox') > -1 ? 'Firefox'
+            : agent.indexOf('safari') > -1 ? 'Safari'
+            : 'other';
+        
+        return browser;
+        }
+
     ngOnInit() {
         this.dmid = this.activatedRoute.snapshot.paramMap.get('dmid');
         this.cmpid = this.activatedRoute.snapshot.paramMap.get('cmpid');
@@ -53,6 +68,30 @@ export class ViewerComponent implements OnInit {
             this.env["isAuthenticated"] = true;
             this.otp = this.activatedRoute.snapshot.paramMap.get('otp')
         }
+
+        var bodyObj = document.getElementsByTagName('body')[0];
+        var pdfObj = document.getElementsByTagName('pdf-viewer')[0]
+        var isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
+            navigator.userAgent &&
+            navigator.userAgent.indexOf('CriOS') == -1 &&
+            navigator.userAgent.indexOf('FxiOS') == -1;
+
+        //this.getBrowserName();
+
+        if (bodyObj && pdfObj) {
+            if (window.screen.width <= 480 && isSafari) {
+                // bodyObj.style.overflow = "hidden";
+                // pdfObj["style"].height = "3500px";
+                // pdfObj["style"].overflow = "hidden";
+                document.getElementsByTagName('body')[0].style.overflow = "hidden";
+            } 
+            // else {
+            //     bodyObj.style.overflow = "unset";
+            //     pdfObj["style"].height = "inherit";
+            //     pdfObj["style"].overflow = "auto";
+            // }
+        }
+        ///
 
         this.config = this.global.getConfig();
         // this.filePath="https://bucket-cmp" + this.global.getCompany() + ".s3.us-east-2.amazonaws.com/"
