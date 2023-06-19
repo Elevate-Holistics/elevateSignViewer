@@ -82,7 +82,7 @@ export class ViewerComponent implements OnInit {
         let v = this.viewer.validate(this.currentView)
         if (v.length > 0) {
             return;
-        }else if(e == "validateonly"){
+        } else if (e == "validateonly") {
             return;
         }
         this.signviewer.validate({
@@ -105,7 +105,7 @@ export class ViewerComponent implements OnInit {
     onFinished(e) {
         // let flag = this.validate();
 
-        
+
         let v = this.viewer.validate(this.currentView)
 
 
@@ -303,5 +303,12 @@ export class ViewerComponent implements OnInit {
                 console.log("Error while uploading signature");
             }
         })
+    }
+
+    finishEdoc() {
+        debugger;
+        // let b: HTMLButtonElement = document.querySelectorAll('[data-tip="FINISH"]')[0] as HTMLButtonElement;
+        // b.click();
+        window["edocFinish"].nativeElement.click();
     }
 }

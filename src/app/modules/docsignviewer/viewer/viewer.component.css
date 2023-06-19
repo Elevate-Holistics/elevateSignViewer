@@ -1,0 +1,12 @@
+.btnextedocfinish {
+    display: none;
+}
+
+@media screen and (max-width: 480px) {
+    .btnextedocfinish {
+        display: block;
+        color: #fff;
+        background-color: rgb(247, 189, 0);
+    }
+    
+}

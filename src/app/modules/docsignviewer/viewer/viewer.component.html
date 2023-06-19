@@ -3,11 +3,16 @@
   <!-- Breadcrumb Menu-->
 </ol>
 
-<div class="fixed-content p-0 " style="overflow-x: hidden;">
+<div class="fixed-content p-0 docsignviewer" style="overflow-x: hidden;overflow-y: hidden;">
   <i-docsignviewer #viewer [toolbarBg]="'#e7edee'" [toolbarColor]="'#333333'" [showSidebar]="true"
     [showZoomControl]="true" [reduceHeight]="153" [zoom]="0.8"  [activedoc]="activedoc"
     (onDoclistselect)="onDocListSelect($event)" (onFinished)="validate($event)" (onCancel)="onCancel($event)"
     (onSignatureCreate)="onSignatureCreate($event)" (onSignatureApplyAll)="onSignatureApplyAll($event)"></i-docsignviewer>
 </div>
+
+<div class="d-flex justify-content-center">
+  <button type="button" class="p-button-warning btnextedocfinish my-2" (click)="finishEdoc()"><i class="fa fa-check pe-1"></i>FINISH</button>
+</div>
+
 
 <p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
